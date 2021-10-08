@@ -20,7 +20,7 @@ public class ConfigurationHandler
             builder.comment("Configure spawn weight & min/max group size. Set weight to 0 to disable.");
 
             batjockey_min = builder.defineInRange("batjockey_min", 1, 1, 100);
-            batjockey_max = builder.defineInRange("batjockey_max", 4, 1, 100);
+            batjockey_max = builder.defineInRange("batjockey_max", 3, 1, 100);
             batjockey_weight = builder.defineInRange("batjockey_weight", 60, 0, 200);
 
             builder.pop();
