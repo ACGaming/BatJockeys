@@ -28,7 +28,7 @@ public class LargeBatRenderer extends MobRenderer<LargeBat, LargeBatModel>
 
     protected void setupRotations(LargeBat p_113882_, PoseStack p_113883_, float p_113884_, float p_113885_, float p_113886_)
     {
-        p_113883_.translate(0.0D, Mth.cos(p_113884_ * 0.3F) * 0.1F, 0.0D);
+        p_113883_.translate(0.0D, Mth.cos(p_113884_ * 0.3F) * 0.05F, 0.0D);
         super.setupRotations(p_113882_, p_113883_, p_113884_, p_113885_, p_113886_);
     }
 

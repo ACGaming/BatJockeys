@@ -31,7 +31,7 @@ public class BatJockeysRegistry
 
     private static final List<Item> SPAWN_EGGS = Lists.newArrayList();
 
-    public static final RegistryObject<EntityType<LargeBat>> LARGE_BAT = createEntity("large_bat", LargeBat::new, 1.5F, 2.2F, 4996656, 986895);
+    public static final RegistryObject<EntityType<LargeBat>> LARGE_BAT = createEntity("large_bat", LargeBat::new, 1.5F, 2.0F, 4996656, 986895);
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityType<?>> event)

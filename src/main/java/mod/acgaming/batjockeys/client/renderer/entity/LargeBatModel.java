@@ -77,7 +77,7 @@ public class LargeBatModel extends HierarchicalModel<LargeBat>
         this.leftWing.setPos(0.0F, 0.0F, 0.0F);
         this.body.xRot = ((float) Math.PI / 4F) + Mth.cos(p_102203_ * 0.1F) * 0.15F;
         this.body.yRot = 0.0F;
-        this.rightWing.yRot = Mth.cos(p_102203_ * 74.48451F * ((float) Math.PI / 180F)) * (float) Math.PI * 0.25F;
+        this.rightWing.yRot = Mth.cos(p_102203_ * 25.0F * ((float) Math.PI / 180F)) * (float) Math.PI * 0.25F;
         this.leftWing.yRot = -this.rightWing.yRot;
         this.rightWingTip.yRot = this.rightWing.yRot * 0.5F;
         this.leftWingTip.yRot = -this.rightWing.yRot * 0.5F;

@@ -12,7 +12,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import mod.acgaming.batjockeys.client.ClientHandler;
-import mod.acgaming.batjockeys.config.ConfigurationHandler;
+import mod.acgaming.batjockeys.config.ConfigHandler;
 import mod.acgaming.batjockeys.init.BatJockeysRegistry;
 
 @Mod(BatJockeys.MOD_ID)
@@ -30,8 +30,8 @@ public class BatJockeys
     {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigurationHandler.spec);
-        eventBus.register(ConfigurationHandler.class);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.SPEC);
+        eventBus.register(ConfigHandler.class);
 
         eventBus.addListener(this::setup);
         eventBus.addListener(this::setupClient);

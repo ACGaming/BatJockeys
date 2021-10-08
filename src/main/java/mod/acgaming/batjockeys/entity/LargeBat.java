@@ -28,16 +28,18 @@ import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
+import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 
 public class LargeBat extends FlyingMob implements Enemy
 {
-    public static final int TICKS_PER_FLAP = Mth.ceil(24.166098F);
-
     public static boolean checkLargeBatSpawnRules(EntityType<LargeBat> largebat, ServerLevelAccessor level, MobSpawnType spawntype, BlockPos pos, Random random)
     {
         return level.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(largebat, level, spawntype, pos, random);
@@ -60,11 +62,6 @@ public class LargeBat extends FlyingMob implements Enemy
         this.lookControl = new LargeBatLookControl(this);
     }
 
-    public boolean isFlapping()
-    {
-        return (this.getUniqueFlapTickOffset() + this.tickCount) % TICKS_PER_FLAP == 0;
-    }
-
     public boolean shouldRenderAtSqrDistance(double p_33107_)
     {
         return true;
@@ -73,11 +70,6 @@ public class LargeBat extends FlyingMob implements Enemy
     public SoundSource getSoundSource()
     {
         return SoundSource.HOSTILE;
-    }
-
-    public int getUniqueFlapTickOffset()
-    {
-        return this.getId() * 3;
     }
 
     protected void registerGoals()
@@ -103,20 +95,14 @@ public class LargeBat extends FlyingMob implements Enemy
         super.tick();
         if (this.level.isClientSide)
         {
-            float f = Mth.cos((float) (this.getUniqueFlapTickOffset() + this.tickCount) * 7.448451F * ((float) Math.PI / 180F) + (float) Math.PI);
-            float f1 = Mth.cos((float) (this.getUniqueFlapTickOffset() + this.tickCount + 1) * 7.448451F * ((float) Math.PI / 180F) + (float) Math.PI);
-            if (f > 0.0F && f1 <= 0.0F)
+            if (this.random.nextInt(20) == 0)
             {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BAT_LOOP, this.getSoundSource(), 0.95F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BAT_LOOP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
             }
-            float f2 = Mth.cos(this.getYRot() * ((float) Math.PI / 180F));
-            float f3 = Mth.sin(this.getYRot() * ((float) Math.PI / 180F));
-            this.level.addParticle(ParticleTypes.SOUL, this.getX() + (double) f2, this.getY(), this.getZ() + (double) f3, 0.0D, 0.0D, 0.0D);
-            this.level.addParticle(ParticleTypes.SOUL, this.getX() - (double) f2, this.getY(), this.getZ() - (double) f3, 0.0D, 0.0D, 0.0D);
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX() - 1.0F, this.getY() + 1.0F, this.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }
 
-    @Override
     @Nullable
     public SoundEvent getAmbientSound()
     {
@@ -159,20 +145,30 @@ public class LargeBat extends FlyingMob implements Enemy
         super.customServerAiStep();
     }
 
-    @Override
     @Nullable
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawntype, @Nullable SpawnGroupData groupdata, @Nullable CompoundTag compoundtag)
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawntype, @Nullable SpawnGroupData spawndata, @Nullable CompoundTag compoundtag)
     {
         this.anchorPoint = this.blockPosition().above(5);
-        groupdata = super.finalizeSpawn(level, difficulty, spawntype, groupdata, compoundtag);
-        Skeleton skeleton = EntityType.SKELETON.create(this.level);
-        if (skeleton != null)
+        spawndata = super.finalizeSpawn(level, difficulty, spawntype, spawndata, compoundtag);
+        if (level.getRandom().nextInt(100) == 0)
         {
+            WitherSkeleton skeleton = EntityType.WITHER_SKELETON.create(this.level);
             skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
             skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
+            skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+            skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.BONE));
             skeleton.startRiding(this);
         }
-        return groupdata;
+        else
+        {
+            Skeleton skeleton = EntityType.SKELETON.create(this.level);
+            skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+            skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
+            skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+            skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.BONE));
+            skeleton.startRiding(this);
+        }
+        return spawndata;
     }
 
     protected SoundEvent getHurtSound(DamageSource p_27451_)
@@ -301,7 +297,7 @@ public class LargeBat extends FlyingMob implements Enemy
                     LargeBat.this.attackPhase = LargeBat.AttackPhase.ATTACK;
                     this.setAnchorAboveTarget();
                     this.nextSweepTick = (8 + LargeBat.this.random.nextInt(4)) * 20;
-                    LargeBat.this.playSound(SoundEvents.BAT_TAKEOFF, 10.0F, 0.95F + LargeBat.this.random.nextFloat() * 0.1F);
+                    LargeBat.this.playSound(SoundEvents.BAT_TAKEOFF, 5.0F, 0.95F + LargeBat.this.random.nextFloat() * 0.1F);
                 }
             }
         }
