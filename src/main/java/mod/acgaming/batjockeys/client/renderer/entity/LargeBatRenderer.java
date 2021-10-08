@@ -1,38 +1,39 @@
 package mod.acgaming.batjockeys.client.renderer.entity;
 
-import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.model.geom.ModelLayers;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import mod.acgaming.batjockeys.entity.LargeBatEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
+import mod.acgaming.batjockeys.entity.LargeBat;
 
 @OnlyIn(Dist.CLIENT)
-public class LargeBatRenderer extends MobRenderer<LargeBatEntity, LargeBatModel>
+public class LargeBatRenderer extends MobRenderer<LargeBat, LargeBatModel>
 {
-    private static final ResourceLocation BAT_TEXTURES = new ResourceLocation("textures/entity/bat.png");
+    private static final ResourceLocation BAT_LOCATION = new ResourceLocation("textures/entity/bat.png");
 
-    public LargeBatRenderer(EntityRendererManager renderManagerIn)
+    public LargeBatRenderer(EntityRendererProvider.Context p_173929_)
     {
-        super(renderManagerIn, new LargeBatModel(), 0.5F);
+        super(p_173929_, new LargeBatModel(p_173929_.bakeLayer(ModelLayers.BAT)), 0.25F);
     }
 
-    public ResourceLocation getEntityTexture(LargeBatEntity entity)
+    public ResourceLocation getTextureLocation(LargeBat p_113876_)
     {
-        return BAT_TEXTURES;
+        return BAT_LOCATION;
     }
 
-    protected void applyRotations(LargeBatEntity entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw, float partialTicks)
+    protected void setupRotations(LargeBat p_113882_, PoseStack p_113883_, float p_113884_, float p_113885_, float p_113886_)
     {
-        matrixStackIn.translate(0.0D, MathHelper.cos(ageInTicks * 0.3F) * 0.1F, 0.0D);
-        super.applyRotations(entityLiving, matrixStackIn, ageInTicks, rotationYaw, partialTicks);
+        p_113883_.translate(0.0D, Mth.cos(p_113884_ * 0.3F) * 0.1F, 0.0D);
+        super.setupRotations(p_113882_, p_113883_, p_113884_, p_113885_, p_113886_);
     }
 
-    protected void preRenderCallback(LargeBatEntity entitylivingbaseIn, MatrixStack matrixStackIn, float partialTickTime)
+    protected void scale(LargeBat p_113878_, PoseStack p_113879_, float p_113880_)
     {
-        matrixStackIn.scale(1.05F, 1.05F, 1.05F);
+        p_113879_.scale(1.05F, 1.05F, 1.05F);
     }
 }

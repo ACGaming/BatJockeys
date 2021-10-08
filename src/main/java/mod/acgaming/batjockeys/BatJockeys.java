@@ -1,35 +1,51 @@
 package mod.acgaming.batjockeys;
 
-import net.minecraftforge.api.distmarker.Dist;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import mod.acgaming.batjockeys.client.ClientHandler;
 import mod.acgaming.batjockeys.config.ConfigurationHandler;
-import mod.acgaming.batjockeys.init.BatJockeysEntities;
 import mod.acgaming.batjockeys.init.BatJockeysRegistry;
 
-@Mod(Reference.MOD_ID)
+@Mod(BatJockeys.MOD_ID)
 public class BatJockeys
 {
+    public static final String MOD_ID = "batjockeys";
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    public static void registerEntities(IEventBus modBus)
+    {
+        BatJockeysRegistry.ENTITY.register(modBus);
+    }
+
     public BatJockeys()
     {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigurationHandler.spec);
         eventBus.register(ConfigurationHandler.class);
+
         eventBus.addListener(this::setup);
-        BatJockeysRegistry.ENTITIES.register(eventBus);
-        eventBus.addListener(BatJockeysEntities::registerEntityAttributes);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> eventBus.addListener(ClientHandler::doClientStuff));
+        eventBus.addListener(this::setupClient);
+
+        registerEntities(eventBus);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
+    public void setup(final FMLCommonSetupEvent event)
     {
-        BatJockeysEntities.initializeEntities();
+
+    }
+
+    public void setupClient(final FMLClientSetupEvent event)
+    {
+        ClientHandler.init();
     }
 }
