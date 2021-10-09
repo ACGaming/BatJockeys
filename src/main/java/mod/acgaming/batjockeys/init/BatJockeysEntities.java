@@ -30,10 +30,10 @@ public class BatJockeysEntities
         Biome biome = ForgeRegistries.BIOMES.getValue(event.getName());
         if (biome != null)
         {
-            MobSpawnInfo info = biome.getMobSpawnInfo();
+            MobSpawnInfo info = biome.getMobSettings();
             List<MobSpawnInfo.Spawners> spawns = event.getSpawns().getSpawner(EntityClassification.MONSTER);
 
-            for (Spawners entry : info.getSpawners(EntityClassification.MONSTER))
+            for (Spawners entry : info.getMobs(EntityClassification.MONSTER))
             {
                 registerSpawn(spawns, entry, ConfigurationHandler.SPAWN.batjockey_weight.get(), ConfigurationHandler.SPAWN.batjockey_min.get(), ConfigurationHandler.SPAWN.batjockey_max.get(), EntityType.SKELETON, BatJockeysRegistry.LARGE_BAT.get());
             }
@@ -47,7 +47,7 @@ public class BatJockeysEntities
 
     public static void registerEntityAttributes(EntityAttributeCreationEvent event)
     {
-        event.put(BatJockeysRegistry.LARGE_BAT.get(), LargeBatEntity.createAttributes().create());
+        event.put(BatJockeysRegistry.LARGE_BAT.get(), LargeBatEntity.createAttributes().build());
     }
 
     public static void registerSpawn(List<Spawners> spawns, Spawners entry, Integer weight, Integer min, Integer max, EntityType<? extends LivingEntity> oldEntity, EntityType<? extends LivingEntity> newEntity)

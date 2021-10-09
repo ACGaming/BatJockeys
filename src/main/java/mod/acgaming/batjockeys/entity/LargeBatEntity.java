@@ -27,12 +27,12 @@ public class LargeBatEntity extends PhantomEntity implements IMob
 {
     public static boolean canSpawn(EntityType<LargeBatEntity> largebatIn, IServerWorld worldIn, SpawnReason reason, BlockPos pos, Random randomIn)
     {
-        return worldIn.getDifficulty() != Difficulty.PEACEFUL && MonsterEntity.isValidLightLevel(worldIn, pos, randomIn) && canSpawnOn(largebatIn, worldIn, reason, pos, randomIn);
+        return worldIn.getDifficulty() != Difficulty.PEACEFUL && MonsterEntity.isDarkEnoughToSpawn(worldIn, pos, randomIn) && checkMobSpawnRules(largebatIn, worldIn, reason, pos, randomIn);
     }
 
     public static AttributeModifierMap.MutableAttribute createAttributes()
     {
-        return MobEntity.func_233666_p_().createMutableAttribute(Attributes.ATTACK_DAMAGE, 1.0D).createMutableAttribute(Attributes.MAX_HEALTH, 12.0D).createMutableAttribute(Attributes.FOLLOW_RANGE, 16.0D);
+        return MobEntity.createMobAttributes().add(Attributes.ATTACK_DAMAGE, 1.0D).add(Attributes.MAX_HEALTH, 12.0D).add(Attributes.FOLLOW_RANGE, 16.0D);
     }
 
     public LargeBatEntity(EntityType<? extends LargeBatEntity> type, World worldIn)
@@ -42,14 +42,14 @@ public class LargeBatEntity extends PhantomEntity implements IMob
 
     @Override
     @Nullable
-    public ILivingEntityData onInitialSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
+    public ILivingEntityData finalizeSpawn(IServerWorld worldIn, DifficultyInstance difficultyIn, SpawnReason reason, @Nullable ILivingEntityData spawnDataIn, @Nullable CompoundNBT dataTag)
     {
-        spawnDataIn = super.onInitialSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        SkeletonEntity skeletonentity = EntityType.SKELETON.create(this.world);
+        spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
+        SkeletonEntity skeletonentity = EntityType.SKELETON.create(this.level);
         if (skeletonentity != null)
         {
-            skeletonentity.setLocationAndAngles(this.getPosX(), this.getPosY(), this.getPosZ(), this.rotationYaw, 0.0F);
-            skeletonentity.onInitialSpawn(worldIn, difficultyIn, reason, null, null);
+            skeletonentity.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
+            skeletonentity.finalizeSpawn(worldIn, difficultyIn, reason, null, null);
             skeletonentity.startRiding(this);
         }
         return spawnDataIn;
@@ -58,19 +58,19 @@ public class LargeBatEntity extends PhantomEntity implements IMob
     @Override
     protected SoundEvent getAmbientSound()
     {
-        return SoundEvents.ENTITY_BAT_AMBIENT;
+        return SoundEvents.BAT_AMBIENT;
     }
 
     @Override
     protected SoundEvent getHurtSound(DamageSource damageSourceIn)
     {
-        return SoundEvents.ENTITY_BAT_HURT;
+        return SoundEvents.BAT_HURT;
     }
 
     @Override
     protected SoundEvent getDeathSound()
     {
-        return SoundEvents.ENTITY_BAT_DEATH;
+        return SoundEvents.BAT_DEATH;
     }
 
     @Override
@@ -80,8 +80,8 @@ public class LargeBatEntity extends PhantomEntity implements IMob
     }
 
     @Override
-    protected float getSoundPitch()
+    protected float getVoicePitch()
     {
-        return super.getSoundPitch() * 0.95F;
+        return super.getVoicePitch() * 0.95F;
     }
 }

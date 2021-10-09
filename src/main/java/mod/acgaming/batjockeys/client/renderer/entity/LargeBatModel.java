@@ -21,8 +21,8 @@ public class LargeBatModel extends SegmentedModel<LargeBatEntity>
 
     public LargeBatModel()
     {
-        this.textureWidth = 64;
-        this.textureHeight = 64;
+        this.texWidth = 64;
+        this.texHeight = 64;
         this.batHead = new ModelRenderer(this, 0, 0);
         this.batHead.addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F);
         ModelRenderer modelrenderer = new ModelRenderer(this, 24, 0);
@@ -34,18 +34,18 @@ public class LargeBatModel extends SegmentedModel<LargeBatEntity>
         this.batHead.addChild(modelrenderer1);
         this.batBody = new ModelRenderer(this, 0, 16);
         this.batBody.addBox(-3.0F, 4.0F, -3.0F, 6.0F, 12.0F, 6.0F);
-        this.batBody.setTextureOffset(0, 34).addBox(-5.0F, 16.0F, 0.0F, 10.0F, 6.0F, 1.0F);
+        this.batBody.texOffs(0, 34).addBox(-5.0F, 16.0F, 0.0F, 10.0F, 6.0F, 1.0F);
         this.batRightWing = new ModelRenderer(this, 42, 0);
         this.batRightWing.addBox(-12.0F, 1.0F, 1.5F, 10.0F, 16.0F, 1.0F);
         this.batOuterRightWing = new ModelRenderer(this, 24, 16);
-        this.batOuterRightWing.setRotationPoint(-12.0F, 1.0F, 1.5F);
+        this.batOuterRightWing.setPos(-12.0F, 1.0F, 1.5F);
         this.batOuterRightWing.addBox(-8.0F, 1.0F, 0.0F, 8.0F, 12.0F, 1.0F);
         this.batLeftWing = new ModelRenderer(this, 42, 0);
         this.batLeftWing.mirror = true;
         this.batLeftWing.addBox(2.0F, 1.0F, 1.5F, 10.0F, 16.0F, 1.0F);
         this.batOuterLeftWing = new ModelRenderer(this, 24, 16);
         this.batOuterLeftWing.mirror = true;
-        this.batOuterLeftWing.setRotationPoint(12.0F, 1.0F, 1.5F);
+        this.batOuterLeftWing.setPos(12.0F, 1.0F, 1.5F);
         this.batOuterLeftWing.addBox(0.0F, 1.0F, 0.0F, 8.0F, 12.0F, 1.0F);
         this.batBody.addChild(this.batRightWing);
         this.batBody.addChild(this.batLeftWing);
@@ -53,24 +53,24 @@ public class LargeBatModel extends SegmentedModel<LargeBatEntity>
         this.batLeftWing.addChild(this.batOuterLeftWing);
     }
 
-    public Iterable<ModelRenderer> getParts()
+    public Iterable<ModelRenderer> parts()
     {
         return ImmutableList.of(this.batHead, this.batBody);
     }
 
-    public void setRotationAngles(LargeBatEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
+    public void setupAnim(LargeBatEntity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch)
     {
-        this.batHead.rotateAngleX = headPitch * ((float) Math.PI / 180F);
-        this.batHead.rotateAngleY = netHeadYaw * ((float) Math.PI / 180F);
-        this.batHead.rotateAngleZ = 0.0F;
-        this.batHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.batRightWing.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.batLeftWing.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.batBody.rotateAngleX = ((float) Math.PI / 4F) + MathHelper.cos(ageInTicks * 0.1F) * 0.15F;
-        this.batBody.rotateAngleY = 0.0F;
-        this.batRightWing.rotateAngleY = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
-        this.batLeftWing.rotateAngleY = -this.batRightWing.rotateAngleY;
-        this.batOuterRightWing.rotateAngleY = this.batRightWing.rotateAngleY * 0.5F;
-        this.batOuterLeftWing.rotateAngleY = -this.batRightWing.rotateAngleY * 0.5F;
+        this.batHead.xRot = headPitch * ((float) Math.PI / 180F);
+        this.batHead.yRot = netHeadYaw * ((float) Math.PI / 180F);
+        this.batHead.zRot = 0.0F;
+        this.batHead.setPos(0.0F, 0.0F, 0.0F);
+        this.batRightWing.setPos(0.0F, 0.0F, 0.0F);
+        this.batLeftWing.setPos(0.0F, 0.0F, 0.0F);
+        this.batBody.xRot = ((float) Math.PI / 4F) + MathHelper.cos(ageInTicks * 0.1F) * 0.15F;
+        this.batBody.yRot = 0.0F;
+        this.batRightWing.yRot = MathHelper.cos(ageInTicks * 1.3F) * (float) Math.PI * 0.25F;
+        this.batLeftWing.yRot = -this.batRightWing.yRot;
+        this.batOuterRightWing.yRot = this.batRightWing.yRot * 0.5F;
+        this.batOuterLeftWing.yRot = -this.batRightWing.yRot * 0.5F;
     }
 }
