@@ -22,10 +22,10 @@ public class ConfigHandler
                 .defineInRange("Min Group Size", 1, 1, 100);
 
             batjockey_max = builder
-                .defineInRange("Max Group Size", 3, 1, 100);
+                .defineInRange("Max Group Size", 2, 1, 100);
 
             batjockey_weight = builder
-                .defineInRange("Spawn Weight", 60, 0, 200);
+                .defineInRange("Spawn Weight", 40, 0, 200);
 
             builder.pop();
         }

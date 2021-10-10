@@ -21,9 +21,10 @@ public class BatJockeys
     public static final String MOD_ID = "batjockeys";
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static void registerEntities(IEventBus modBus)
+    public static void register(IEventBus modBus)
     {
-        BatJockeysRegistry.ENTITY.register(modBus);
+        BatJockeysRegistry.ENTITIES.register(modBus);
+        BatJockeysRegistry.ITEMS.register(modBus);
     }
 
     public BatJockeys()
@@ -36,7 +37,7 @@ public class BatJockeys
         eventBus.addListener(this::setup);
         eventBus.addListener(this::setupClient);
 
-        registerEntities(eventBus);
+        register(eventBus);
     }
 
     public void setup(final FMLCommonSetupEvent event)

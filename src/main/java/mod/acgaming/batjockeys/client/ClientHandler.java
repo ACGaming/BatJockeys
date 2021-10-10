@@ -18,13 +18,13 @@ public class ClientHandler
     public static ModelLayerLocation LARGE_BAT_LAYER = new ModelLayerLocation(new ResourceLocation(BatJockeys.MOD_ID, "large_bat"), "large_bat");
 
     @SubscribeEvent
-    public static void registerEntityRenders(EntityRenderersEvent.RegisterRenderers event)
+    public static void registerRenderers(final EntityRenderersEvent.RegisterRenderers event)
     {
         event.registerEntityRenderer(BatJockeysRegistry.LARGE_BAT.get(), LargeBatRenderer::new);
     }
 
     @SubscribeEvent
-    public static void registerLayerDefinition(EntityRenderersEvent.RegisterLayerDefinitions event)
+    public static void registerLayerDefinition(final EntityRenderersEvent.RegisterLayerDefinitions event)
     {
         event.registerLayerDefinition(LARGE_BAT_LAYER, LargeBatModel::createBodyLayer);
     }
