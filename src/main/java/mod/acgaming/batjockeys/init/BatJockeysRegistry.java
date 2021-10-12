@@ -16,7 +16,7 @@ public class BatJockeysRegistry
 
     public static final RegistryObject<EntityType<LargeBatEntity>> LARGE_BAT = ENTITIES.register("large_bat",
         () -> register("large_bat", EntityType.Builder.of(LargeBatEntity::new, EntityClassification.MONSTER)
-            .sized(1.5F, 2.2F).clientTrackingRange(5)));
+            .sized(1.5F, 2.0F).clientTrackingRange(5)));
 
     public static <T extends Entity> EntityType<T> register(String id, EntityType.Builder<T> builder, boolean sendVelocityUpdates)
     {

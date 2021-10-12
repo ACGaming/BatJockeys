@@ -2,7 +2,7 @@ package mod.acgaming.batjockeys.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ConfigurationHandler
+public class ConfigHandler
 {
     public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
     public static final Spawn SPAWN = new Spawn(BUILDER);
@@ -16,12 +16,16 @@ public class ConfigurationHandler
 
         Spawn(ForgeConfigSpec.Builder builder)
         {
-            builder.push("Spawn Chances");
-            builder.comment("Configure spawn weight & min/max group size. Set weight to 0 to disable.");
+            builder.push("Spawn Settings");
 
-            batjockey_min = builder.defineInRange("batjockey_min", 2, 1, 64);
-            batjockey_max = builder.defineInRange("batjockey_max", 4, 1, 64);
-            batjockey_weight = builder.defineInRange("batjockey_weight", 80, 0, 1000);
+            batjockey_min = builder
+                .defineInRange("Min Group Size", 1, 1, 100);
+
+            batjockey_max = builder
+                .defineInRange("Max Group Size", 2, 1, 100);
+
+            batjockey_weight = builder
+                .defineInRange("Spawn Weight", 40, 0, 200);
 
             builder.pop();
         }

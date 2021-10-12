@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import mod.acgaming.batjockeys.Reference;
-import mod.acgaming.batjockeys.config.ConfigurationHandler;
+import mod.acgaming.batjockeys.config.ConfigHandler;
 import mod.acgaming.batjockeys.entity.LargeBatEntity;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
@@ -35,7 +35,7 @@ public class BatJockeysEntities
 
             for (Spawners entry : info.getMobs(EntityClassification.MONSTER))
             {
-                registerSpawn(spawns, entry, ConfigurationHandler.SPAWN.batjockey_weight.get(), ConfigurationHandler.SPAWN.batjockey_min.get(), ConfigurationHandler.SPAWN.batjockey_max.get(), EntityType.SKELETON, BatJockeysRegistry.LARGE_BAT.get());
+                registerSpawn(spawns, entry, ConfigHandler.SPAWN.batjockey_weight.get(), ConfigHandler.SPAWN.batjockey_min.get(), ConfigHandler.SPAWN.batjockey_max.get(), EntityType.SKELETON, BatJockeysRegistry.LARGE_BAT.get());
             }
         }
     }
