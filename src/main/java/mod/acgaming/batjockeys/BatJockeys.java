@@ -4,6 +4,7 @@ package mod.acgaming.batjockeys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -20,6 +21,8 @@ public class BatJockeys
 {
     public static final String MOD_ID = "batjockeys";
     public static final Logger LOGGER = LogManager.getLogger();
+
+    public static boolean trickortreat;
 
     public static void register(IEventBus modBus)
     {
@@ -38,6 +41,11 @@ public class BatJockeys
         eventBus.addListener(this::setupClient);
 
         register(eventBus);
+
+        if (ModList.get().isLoaded("trickortreat"))
+        {
+            trickortreat = true;
+        }
     }
 
     public void setup(final FMLCommonSetupEvent event)

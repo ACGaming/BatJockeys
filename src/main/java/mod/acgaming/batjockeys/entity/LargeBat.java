@@ -31,12 +31,14 @@ import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+
+import mod.acgaming.batjockeys.BatJockeys;
+import mod.acgaming.batjockeys.config.ConfigHandler;
+import mod.acgaming.batjockeys.config.ListHelper;
 
 public class LargeBat extends FlyingMob implements Enemy
 {
@@ -99,7 +101,19 @@ public class LargeBat extends FlyingMob implements Enemy
             {
                 this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BAT_LOOP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
             }
-            this.level.addParticle(ParticleTypes.SMOKE, this.getX() - 1.0F, this.getY() + 1.0F, this.getZ(), 0.0D, 0.0D, 0.0D);
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+        }
+
+        if (BatJockeys.trickortreat)
+        {
+            if (this.random.nextInt(10000) == 0)
+            {
+                if (this.level.isClientSide)
+                {
+                    this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_BURP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
+                }
+                this.spawnAtLocation(ListHelper.getItemValueFromName("trickortreat:skeleton_goodie_bag"));
+            }
         }
     }
 
@@ -150,23 +164,41 @@ public class LargeBat extends FlyingMob implements Enemy
     {
         this.anchorPoint = this.blockPosition().above(5);
         spawndata = super.finalizeSpawn(level, difficulty, spawntype, spawndata, compoundtag);
-        if (level.getRandom().nextInt(100) == 0)
+        if (level.getRandom().nextInt(10) == 0)
         {
             WitherSkeleton skeleton = EntityType.WITHER_SKELETON.create(this.level);
-            skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-            skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
-            skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-            skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.BONE));
-            skeleton.startRiding(this);
+            if (skeleton != null)
+            {
+                skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
+
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_head.get())));
+                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_chest.get())));
+                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_legs.get())));
+                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_feet.get())));
+                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_main.get())));
+                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_off.get())));
+
+                skeleton.startRiding(this);
+            }
         }
         else
         {
             Skeleton skeleton = EntityType.SKELETON.create(this.level);
-            skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-            skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
-            skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-            skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.BONE));
-            skeleton.startRiding(this);
+            if (skeleton != null)
+            {
+                skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
+
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_head.get())));
+                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_chest.get())));
+                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_legs.get())));
+                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_feet.get())));
+                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_main.get())));
+                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_off.get())));
+
+                skeleton.startRiding(this);
+            }
         }
         return spawndata;
     }
