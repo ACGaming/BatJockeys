@@ -35,7 +35,7 @@ public class BatJockeysEntities
 
             for (Spawners entry : info.getMobs(EntityClassification.MONSTER))
             {
-                registerSpawn(spawns, entry, ConfigHandler.SPAWN.batjockey_weight.get(), ConfigHandler.SPAWN.batjockey_min.get(), ConfigHandler.SPAWN.batjockey_max.get(), EntityType.SKELETON, BatJockeysRegistry.LARGE_BAT.get());
+                registerSpawn(spawns, entry, ConfigHandler.SPAWNING.batjockey_weight.get(), ConfigHandler.SPAWNING.batjockey_min.get(), ConfigHandler.SPAWNING.batjockey_max.get(), EntityType.SKELETON, BatJockeysRegistry.LARGE_BAT.get());
             }
         }
     }

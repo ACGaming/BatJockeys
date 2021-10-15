@@ -20,7 +20,7 @@ public class BatJockeys
     public BatJockeys()
     {
         final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.SPEC);
         eventBus.register(ConfigHandler.class);
         eventBus.addListener(this::setup);
         BatJockeysRegistry.ENTITIES.register(eventBus);

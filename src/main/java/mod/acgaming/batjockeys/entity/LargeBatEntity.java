@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.Attributes;
@@ -22,7 +21,6 @@ import net.minecraft.entity.passive.CatEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.particles.ParticleTypes;
@@ -37,6 +35,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+
+import mod.acgaming.batjockeys.config.ConfigHandler;
+import mod.acgaming.batjockeys.config.ListHelper;
 
 public class LargeBatEntity extends FlyingEntity implements IMob
 {
@@ -142,7 +143,7 @@ public class LargeBatEntity extends FlyingEntity implements IMob
             {
                 this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BAT_LOOP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
             }
-            this.level.addParticle(ParticleTypes.SMOKE, this.getX() - 1.0F, this.getY() + 1.0F, this.getZ(), 0.0D, 0.0D, 0.0D);
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
         }
     }
 
@@ -194,15 +195,21 @@ public class LargeBatEntity extends FlyingEntity implements IMob
     {
         this.anchorPoint = this.blockPosition().above(5);
         spawnDataIn = super.finalizeSpawn(worldIn, difficultyIn, reason, spawnDataIn, dataTag);
-        if (level.getRandom().nextInt(100) == 0)
+        if (level.getRandom().nextInt(10) == 0)
         {
             WitherSkeletonEntity skeletonentity = EntityType.WITHER_SKELETON.create(this.level);
             if (skeletonentity != null)
             {
                 skeletonentity.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
                 skeletonentity.finalizeSpawn(worldIn, difficultyIn, reason, null, null);
-                skeletonentity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-                skeletonentity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.BONE));
+
+                skeletonentity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_head.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_chest.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_legs.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_feet.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_main.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_off.get())));
+
                 skeletonentity.startRiding(this);
             }
         }
@@ -213,8 +220,14 @@ public class LargeBatEntity extends FlyingEntity implements IMob
             {
                 skeletonentity.moveTo(this.getX(), this.getY(), this.getZ(), this.yRot, 0.0F);
                 skeletonentity.finalizeSpawn(worldIn, difficultyIn, reason, null, null);
-                skeletonentity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-                skeletonentity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(Items.BONE));
+
+                skeletonentity.setItemSlot(EquipmentSlotType.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_head.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_chest.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_legs.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_feet.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_main.get())));
+                skeletonentity.setItemSlot(EquipmentSlotType.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_off.get())));
+
                 skeletonentity.startRiding(this);
             }
         }
