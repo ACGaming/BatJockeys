@@ -1,4 +1,4 @@
-package mod.acgaming.batjockeys.entity;
+package mod.acgaming.jockeys.entity;
 
 import java.util.EnumSet;
 import java.util.Random;
@@ -32,10 +32,10 @@ import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 
-import mod.acgaming.batjockeys.config.ConfigHandler;
-import mod.acgaming.batjockeys.config.ListHelper;
+import mod.acgaming.jockeys.Jockeys;
 
 public class VexBat extends Monster
 {
@@ -48,7 +48,7 @@ public class VexBat extends Monster
 
     public static AttributeSupplier.Builder createAttributes()
     {
-        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.16D).add(Attributes.FOLLOW_RANGE, 100.0D).add(Attributes.ATTACK_DAMAGE, 3.0D);
+        return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ATTACK_DAMAGE, 3.0D);
     }
 
     @Nullable
@@ -179,6 +179,10 @@ public class VexBat extends Monster
         {
             vex.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
             vex.finalizeSpawn(level, difficulty, spawntype, null, null);
+            if (Jockeys.isHalloween())
+            {
+                vex.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+            }
             vex.startRiding(this);
         }
         return spawndata;
@@ -299,11 +303,11 @@ public class VexBat extends Monster
                 if (d0 < VexBat.this.getBoundingBox().getSize())
                 {
                     this.operation = MoveControl.Operation.WAIT;
-                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().scale(0.5D));
+                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().scale(1.5D));
                 }
                 else
                 {
-                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.05D / d0)));
+                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.15D / d0)));
                     if (VexBat.this.getTarget() == null)
                     {
                         Vec3 vec31 = VexBat.this.getDeltaMovement();

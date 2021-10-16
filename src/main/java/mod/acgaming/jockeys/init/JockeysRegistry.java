@@ -1,4 +1,4 @@
-package mod.acgaming.batjockeys.init;
+package mod.acgaming.jockeys.init;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
@@ -16,24 +16,24 @@ import net.minecraftforge.fmllegacy.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import mod.acgaming.batjockeys.BatJockeys;
-import mod.acgaming.batjockeys.entity.SkeletonBat;
-import mod.acgaming.batjockeys.entity.VexBat;
+import mod.acgaming.jockeys.Jockeys;
+import mod.acgaming.jockeys.entity.SkeletonBat;
+import mod.acgaming.jockeys.entity.VexBat;
 
 @SuppressWarnings("unused")
-@Mod.EventBusSubscriber(modid = BatJockeys.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BatJockeysRegistry
+@Mod.EventBusSubscriber(modid = Jockeys.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class JockeysRegistry
 {
     // ENTITIES
-    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, BatJockeys.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, Jockeys.MOD_ID);
     public static final RegistryObject<EntityType<SkeletonBat>> SKELETON_BAT = ENTITIES.register("skeleton_bat", () ->
-        EntityType.Builder.of(SkeletonBat::new, MobCategory.MONSTER).sized(1.5F, 2.0F).setTrackingRange(64).setUpdateInterval(1).build(new ResourceLocation(BatJockeys.MOD_ID, "skeleton_bat").toString())
+        EntityType.Builder.of(SkeletonBat::new, MobCategory.MONSTER).sized(1.5F, 2.0F).setTrackingRange(64).setUpdateInterval(1).build(new ResourceLocation(Jockeys.MOD_ID, "skeleton_bat").toString())
     );
     public static final RegistryObject<EntityType<VexBat>> VEX_BAT = ENTITIES.register("vex_bat", () ->
-        EntityType.Builder.of(VexBat::new, MobCategory.MONSTER).sized(0.5F, 0.9F).setTrackingRange(64).setUpdateInterval(1).build(new ResourceLocation(BatJockeys.MOD_ID, "vex_bat").toString())
+        EntityType.Builder.of(VexBat::new, MobCategory.MONSTER).sized(0.5F, 0.9F).setTrackingRange(64).setUpdateInterval(1).build(new ResourceLocation(Jockeys.MOD_ID, "vex_bat").toString())
     );
     // ITEMS
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BatJockeys.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Jockeys.MOD_ID);
     public static final RegistryObject<ForgeSpawnEggItem> SKELETON_BAT_EGG = ITEMS.register("skeleton_bat_spawn_egg", () ->
         new ForgeSpawnEggItem(SKELETON_BAT, 4996656, 986895, new Item.Properties().tab(CreativeModeTab.TAB_MISC))
     );

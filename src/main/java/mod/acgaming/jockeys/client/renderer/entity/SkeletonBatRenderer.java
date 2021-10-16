@@ -1,4 +1,4 @@
-package mod.acgaming.batjockeys.client.renderer.entity;
+package mod.acgaming.jockeys.client.renderer.entity;
 
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import mod.acgaming.batjockeys.entity.SkeletonBat;
+import mod.acgaming.jockeys.entity.SkeletonBat;
 
 @OnlyIn(Dist.CLIENT)
 public class SkeletonBatRenderer extends MobRenderer<SkeletonBat, SkeletonBatModel>

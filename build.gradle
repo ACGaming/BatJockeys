@@ -11,7 +11,7 @@ buildscript {
 
 apply plugin: 'net.minecraftforge.gradle'
 
-group = "mod.acgaming.batjockeys"
+group = "mod.acgaming.jockeys"
 version = "${version}"
 
 java {
@@ -145,7 +145,7 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "batjockeys",
+                "Specification-Title"     : "jockeys",
                 "Specification-Vendor"    : "ACGaming",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,

@@ -1,10 +1,10 @@
-package mod.acgaming.batjockeys.config;
+package mod.acgaming.jockeys.config;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class ListHelper
+public class RegistryHelper
 {
     public static Item getItemValueFromName(String name)
     {

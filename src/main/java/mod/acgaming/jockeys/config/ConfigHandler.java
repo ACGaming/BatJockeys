@@ -1,4 +1,4 @@
-package mod.acgaming.batjockeys.config;
+package mod.acgaming.jockeys.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
@@ -39,7 +39,7 @@ public class ConfigHandler
 
             jockey_head = builder
                 .comment("Head armor for jockeys")
-                .define("Skeleton Bat Jockey Head", "minecraft:carved_pumpkin");
+                .define("Skeleton Bat Jockey Head", "");
 
             jockey_chest = builder
                 .comment("Chest armor for jockeys")

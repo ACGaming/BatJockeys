@@ -1,4 +1,4 @@
-package mod.acgaming.batjockeys.entity;
+package mod.acgaming.jockeys.entity;
 
 import java.util.Comparator;
 import java.util.EnumSet;
@@ -33,12 +33,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 
-import mod.acgaming.batjockeys.BatJockeys;
-import mod.acgaming.batjockeys.config.ConfigHandler;
-import mod.acgaming.batjockeys.config.ListHelper;
+import mod.acgaming.jockeys.Jockeys;
+import mod.acgaming.jockeys.config.ConfigHandler;
+import mod.acgaming.jockeys.config.RegistryHelper;
 
 public class SkeletonBat extends FlyingMob implements Enemy
 {
@@ -49,7 +50,7 @@ public class SkeletonBat extends FlyingMob implements Enemy
 
     public static AttributeSupplier.Builder createAttributes()
     {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.MOVEMENT_SPEED, 0.16D).add(Attributes.FOLLOW_RANGE, 100.0D).add(Attributes.ATTACK_DAMAGE, 1.0D);
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ATTACK_DAMAGE, 1.0D);
     }
 
     Vec3 moveTargetPoint = Vec3.ZERO;
@@ -104,7 +105,7 @@ public class SkeletonBat extends FlyingMob implements Enemy
             this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 1.0F, this.getZ(), 0.0D, 0.0D, 0.0D);
         }
 
-        if (BatJockeys.trickortreat)
+        if (Jockeys.trickortreat)
         {
             if (this.random.nextInt(10000) == 0)
             {
@@ -112,7 +113,10 @@ public class SkeletonBat extends FlyingMob implements Enemy
                 {
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_BURP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
                 }
-                this.spawnAtLocation(ListHelper.getItemValueFromName("trickortreat:skeleton_goodie_bag"));
+                if (Jockeys.isHalloween())
+                {
+                    this.spawnAtLocation(RegistryHelper.getItemValueFromName("trickortreat:skeleton_goodie_bag"));
+                }
             }
         }
     }
@@ -172,12 +176,19 @@ public class SkeletonBat extends FlyingMob implements Enemy
                 skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
 
-                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
-                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
-                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
-                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
-                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
-                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
+                if (Jockeys.isHalloween())
+                {
+                    skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+                }
+                else
+                {
+                    skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
+                }
+                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
+                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
+                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
+                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
+                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
 
                 skeleton.startRiding(this);
             }
@@ -190,12 +201,12 @@ public class SkeletonBat extends FlyingMob implements Enemy
                 skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
 
-                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
-                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
-                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
-                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
-                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
-                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
+                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
+                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
+                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
+                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
+                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
 
                 skeleton.startRiding(this);
             }

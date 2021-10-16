@@ -1,4 +1,4 @@
-package mod.acgaming.batjockeys.client.renderer.entity;
+package mod.acgaming.jockeys.client.renderer.entity;
 
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import mod.acgaming.batjockeys.entity.VexBat;
+import mod.acgaming.jockeys.entity.VexBat;
 
 @OnlyIn(Dist.CLIENT)
 public class VexBatModel extends HierarchicalModel<VexBat>
