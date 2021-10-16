@@ -26,12 +26,11 @@ import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
-import net.minecraft.world.entity.monster.WitherSkeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -43,14 +42,14 @@ import mod.acgaming.jockeys.config.RegistryHelper;
 
 public class SkeletonBat extends FlyingMob implements Enemy
 {
-    public static boolean checkSkeletonBatSpawnRules(EntityType<SkeletonBat> skeleton_bat, ServerLevelAccessor level, MobSpawnType spawntype, BlockPos pos, Random random)
-    {
-        return level.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(skeleton_bat, level, spawntype, pos, random);
-    }
-
     public static AttributeSupplier.Builder createAttributes()
     {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ATTACK_DAMAGE, 1.0D);
+    }
+
+    public static boolean checkSpawnRules(EntityType<SkeletonBat> p_32735_, LevelAccessor p_32736_, MobSpawnType p_32737_, BlockPos p_32738_, Random p_32739_)
+    {
+        return p_32736_.getDifficulty() != Difficulty.PEACEFUL && p_32739_.nextInt(20) == 0 && checkMobSpawnRules(p_32735_, p_32736_, p_32737_, p_32738_, p_32739_);
     }
 
     Vec3 moveTargetPoint = Vec3.ZERO;
@@ -60,9 +59,13 @@ public class SkeletonBat extends FlyingMob implements Enemy
     public SkeletonBat(EntityType<? extends SkeletonBat> typeIn, Level levelIn)
     {
         super(typeIn, levelIn);
-        this.xpReward = 5;
         this.moveControl = new SkeletonBatMoveControl(this);
         this.lookControl = new SkeletonBatLookControl(this);
+        this.xpReward = 5;
+        if (Jockeys.isHalloween())
+        {
+            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+        }
     }
 
     public boolean shouldRenderAtSqrDistance(double p_33107_)
@@ -73,6 +76,43 @@ public class SkeletonBat extends FlyingMob implements Enemy
     public SoundSource getSoundSource()
     {
         return SoundSource.HOSTILE;
+    }
+
+    protected SoundEvent getHurtSound(DamageSource p_27451_)
+    {
+        return SoundEvents.BAT_HURT;
+    }
+
+    protected SoundEvent getDeathSound()
+    {
+        return SoundEvents.BAT_DEATH;
+    }
+
+    public MobType getMobType()
+    {
+        return MobType.UNDEAD;
+    }
+
+    protected float getSoundVolume()
+    {
+        return 0.1F;
+    }
+
+    public float getVoicePitch()
+    {
+        return super.getVoicePitch() * 0.95F;
+    }
+
+    public EntityDimensions getDimensions(Pose p_33113_)
+    {
+        EntityDimensions entitydimensions = super.getDimensions(p_33113_);
+        float f = (entitydimensions.width + 0.2F) / entitydimensions.width;
+        return entitydimensions.scale(f);
+    }
+
+    protected float getStandingEyeHeight(Pose p_33136_, EntityDimensions p_33137_)
+    {
+        return p_33137_.height * 0.35F;
     }
 
     protected void registerGoals()
@@ -168,87 +208,29 @@ public class SkeletonBat extends FlyingMob implements Enemy
     {
         this.anchorPoint = this.blockPosition().above(5);
         spawndata = super.finalizeSpawn(level, difficulty, spawntype, spawndata, compoundtag);
-        if (level.getRandom().nextInt(10) == 0)
+        Skeleton skeleton = EntityType.SKELETON.create(this.level);
+        if (skeleton != null)
         {
-            WitherSkeleton skeleton = EntityType.WITHER_SKELETON.create(this.level);
-            if (skeleton != null)
+            skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+            skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
+
+            if (Jockeys.isHalloween())
             {
-                skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
-
-                if (Jockeys.isHalloween())
-                {
-                    skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-                }
-                else
-                {
-                    skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
-                }
-                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
-                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
-                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
-                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
-                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
-
-                skeleton.startRiding(this);
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
             }
-        }
-        else
-        {
-            Skeleton skeleton = EntityType.SKELETON.create(this.level);
-            if (skeleton != null)
+            else
             {
-                skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
-
                 skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
-                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
-                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
-                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
-                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
-                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
-
-                skeleton.startRiding(this);
             }
+            skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
+            skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
+            skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
+            skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
+            skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
+
+            skeleton.startRiding(this);
         }
         return spawndata;
-    }
-
-    protected SoundEvent getHurtSound(DamageSource p_27451_)
-    {
-        return SoundEvents.BAT_HURT;
-    }
-
-    protected SoundEvent getDeathSound()
-    {
-        return SoundEvents.BAT_DEATH;
-    }
-
-    public MobType getMobType()
-    {
-        return MobType.UNDEAD;
-    }
-
-    protected float getSoundVolume()
-    {
-        return 0.1F;
-    }
-
-    public float getVoicePitch()
-    {
-        return super.getVoicePitch() * 0.95F;
-    }
-
-    public EntityDimensions getDimensions(Pose p_33113_)
-    {
-        EntityDimensions entitydimensions = super.getDimensions(p_33113_);
-        float f = (entitydimensions.width + 0.2F) / entitydimensions.width;
-        return entitydimensions.scale(f);
-    }
-
-    protected float getStandingEyeHeight(Pose p_33136_, EntityDimensions p_33137_)
-    {
-        return p_33137_.height * 0.35F;
     }
 
     enum AttackPhase

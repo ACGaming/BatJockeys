@@ -2,5 +2,7 @@
   "entity.jockeys.skeleton_bat": "Skelettfledermaus",
   "item.jockeys.skeleton_bat_spawn_egg": "Skelettfledermaus-Spawnei",
   "entity.jockeys.vex_bat": "Plagegeistfledermaus",
-  "item.jockeys.vex_bat_spawn_egg": "Plagegeistfledermaus-Spawnei"
+  "item.jockeys.vex_bat_spawn_egg": "Plagegeistfledermaus-Spawnei",
+  "entity.jockeys.wither_skeleton_ghast": "Witherskelettghast",
+  "item.jockeys.wither_skeleton_ghast_spawn_egg": "Witherskelettghast-Spawnei"
 }

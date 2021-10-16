@@ -31,6 +31,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -41,14 +42,14 @@ public class VexBat extends Monster
 {
     protected static final EntityDataAccessor<Byte> DATA_FLAGS_ID = SynchedEntityData.defineId(VexBat.class, EntityDataSerializers.BYTE);
 
-    public static boolean checkVexBatSpawnRules(EntityType<VexBat> vex_bat, ServerLevelAccessor level, MobSpawnType spawntype, BlockPos pos, Random random)
-    {
-        return level.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(vex_bat, level, spawntype, pos, random);
-    }
-
     public static AttributeSupplier.Builder createAttributes()
     {
         return Monster.createMonsterAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ATTACK_DAMAGE, 3.0D);
+    }
+
+    public static boolean checkSpawnRules(EntityType<VexBat> p_32735_, LevelAccessor p_32736_, MobSpawnType p_32737_, BlockPos p_32738_, Random p_32739_)
+    {
+        return p_32736_.getDifficulty() != Difficulty.PEACEFUL && p_32739_.nextInt(20) == 0 && checkMobSpawnRules(p_32735_, p_32736_, p_32737_, p_32738_, p_32739_);
     }
 
     @Nullable
@@ -61,6 +62,10 @@ public class VexBat extends Monster
         super(p_33984_, p_33985_);
         this.moveControl = new VexBatMoveControl(this);
         this.xpReward = 3;
+        if (Jockeys.isHalloween())
+        {
+            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+        }
     }
 
     public void move(MoverType p_33997_, Vec3 p_33998_)

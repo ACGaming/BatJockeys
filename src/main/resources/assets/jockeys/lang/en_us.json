@@ -2,5 +2,7 @@
   "entity.jockeys.skeleton_bat": "Skeleton Bat",
   "item.jockeys.skeleton_bat_spawn_egg": "Skeleton Bat Spawn Egg",
   "entity.jockeys.vex_bat": "Vex Bat",
-  "item.jockeys.vex_bat_spawn_egg": "Vex Bat Spawn Egg"
+  "item.jockeys.vex_bat_spawn_egg": "Vex Bat Spawn Egg",
+  "entity.jockeys.wither_skeleton_ghast": "Wither Skeleton Ghast",
+  "item.jockeys.wither_skeleton_ghast_spawn_egg": "Wither Skeleton Ghast Spawn Egg"
 }
