@@ -40,11 +40,11 @@ import mod.acgaming.batjockeys.BatJockeys;
 import mod.acgaming.batjockeys.config.ConfigHandler;
 import mod.acgaming.batjockeys.config.ListHelper;
 
-public class LargeBat extends FlyingMob implements Enemy
+public class SkeletonBat extends FlyingMob implements Enemy
 {
-    public static boolean checkLargeBatSpawnRules(EntityType<LargeBat> largebat, ServerLevelAccessor level, MobSpawnType spawntype, BlockPos pos, Random random)
+    public static boolean checkSkeletonBatSpawnRules(EntityType<SkeletonBat> skeleton_bat, ServerLevelAccessor level, MobSpawnType spawntype, BlockPos pos, Random random)
     {
-        return level.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(largebat, level, spawntype, pos, random);
+        return level.getDifficulty() != Difficulty.PEACEFUL && Monster.isDarkEnoughToSpawn(level, pos, random) && checkMobSpawnRules(skeleton_bat, level, spawntype, pos, random);
     }
 
     public static AttributeSupplier.Builder createAttributes()
@@ -54,14 +54,14 @@ public class LargeBat extends FlyingMob implements Enemy
 
     Vec3 moveTargetPoint = Vec3.ZERO;
     BlockPos anchorPoint = BlockPos.ZERO;
-    LargeBat.AttackPhase attackPhase = LargeBat.AttackPhase.SURROUND;
+    SkeletonBat.AttackPhase attackPhase = SkeletonBat.AttackPhase.SURROUND;
 
-    public LargeBat(EntityType<? extends LargeBat> typeIn, Level levelIn)
+    public SkeletonBat(EntityType<? extends SkeletonBat> typeIn, Level levelIn)
     {
         super(typeIn, levelIn);
         this.xpReward = 5;
-        this.moveControl = new LargeBatMoveControl(this);
-        this.lookControl = new LargeBatLookControl(this);
+        this.moveControl = new SkeletonBatMoveControl(this);
+        this.lookControl = new SkeletonBatLookControl(this);
     }
 
     public boolean shouldRenderAtSqrDistance(double p_33107_)
@@ -76,15 +76,15 @@ public class LargeBat extends FlyingMob implements Enemy
 
     protected void registerGoals()
     {
-        this.goalSelector.addGoal(1, new LargeBatAttackStrategyGoal());
-        this.goalSelector.addGoal(2, new LargeBatSweepAttackGoal());
-        this.goalSelector.addGoal(3, new LargeBatCircleAroundAnchorGoal());
-        this.targetSelector.addGoal(1, new LargeBatAttackPlayerTargetGoal());
+        this.goalSelector.addGoal(1, new SkeletonBatAttackStrategyGoal());
+        this.goalSelector.addGoal(2, new SkeletonBatSweepAttackGoal());
+        this.goalSelector.addGoal(3, new SkeletonBatCircleAroundAnchorGoal());
+        this.targetSelector.addGoal(1, new SkeletonBatAttackPlayerTargetGoal());
     }
 
     protected BodyRotationControl createBodyControl()
     {
-        return new LargeBatBodyRotationControl(this);
+        return new SkeletonBatBodyRotationControl(this);
     }
 
     public boolean canAttackType(EntityType<?> p_33111_)
@@ -99,9 +99,9 @@ public class LargeBat extends FlyingMob implements Enemy
         {
             if (this.random.nextInt(20) == 0)
             {
-                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BAT_LOOP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
+                this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.BAT_LOOP, this.getSoundSource(), 0.4F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
             }
-            this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
+            this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 1.0F, this.getZ(), 0.0D, 0.0D, 0.0D);
         }
 
         if (BatJockeys.trickortreat)
@@ -172,12 +172,12 @@ public class LargeBat extends FlyingMob implements Enemy
                 skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
 
-                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_head.get())));
-                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_chest.get())));
-                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_legs.get())));
-                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_feet.get())));
-                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_main.get())));
-                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_off.get())));
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
+                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
+                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
+                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
+                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
+                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
 
                 skeleton.startRiding(this);
             }
@@ -190,12 +190,12 @@ public class LargeBat extends FlyingMob implements Enemy
                 skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
 
-                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_head.get())));
-                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_chest.get())));
-                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_legs.get())));
-                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_feet.get())));
-                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_main.get())));
-                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.GENERAL.jockey_item_off.get())));
+                skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_head.get())));
+                skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_chest.get())));
+                skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_legs.get())));
+                skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_feet.get())));
+                skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_main.get())));
+                skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(ListHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockey_item_off.get())));
 
                 skeleton.startRiding(this);
             }
@@ -246,9 +246,9 @@ public class LargeBat extends FlyingMob implements Enemy
         ATTACK
     }
 
-    static class LargeBatLookControl extends LookControl
+    static class SkeletonBatLookControl extends LookControl
     {
-        public LargeBatLookControl(Mob p_33235_)
+        public SkeletonBatLookControl(Mob p_33235_)
         {
             super(p_33235_);
         }
@@ -258,7 +258,7 @@ public class LargeBat extends FlyingMob implements Enemy
         }
     }
 
-    class LargeBatAttackPlayerTargetGoal extends Goal
+    class SkeletonBatAttackPlayerTargetGoal extends Goal
     {
         private final TargetingConditions attackTargeting = TargetingConditions.forCombat().range(64.0D);
         private int nextScanTick = 20;
@@ -272,16 +272,16 @@ public class LargeBat extends FlyingMob implements Enemy
             else
             {
                 this.nextScanTick = 60;
-                List<Player> list = LargeBat.this.level.getNearbyPlayers(this.attackTargeting, LargeBat.this, LargeBat.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
+                List<Player> list = SkeletonBat.this.level.getNearbyPlayers(this.attackTargeting, SkeletonBat.this, SkeletonBat.this.getBoundingBox().inflate(16.0D, 64.0D, 16.0D));
                 if (!list.isEmpty())
                 {
                     list.sort(Comparator.<Entity, Double>comparing(Entity::getY).reversed());
 
                     for (Player player : list)
                     {
-                        if (LargeBat.this.canAttack(player, TargetingConditions.DEFAULT))
+                        if (SkeletonBat.this.canAttack(player, TargetingConditions.DEFAULT))
                         {
-                            LargeBat.this.setTarget(player);
+                            SkeletonBat.this.setTarget(player);
                             return true;
                         }
                     }
@@ -292,73 +292,73 @@ public class LargeBat extends FlyingMob implements Enemy
 
         public boolean canContinueToUse()
         {
-            LivingEntity livingentity = LargeBat.this.getTarget();
-            return livingentity != null && LargeBat.this.canAttack(livingentity, TargetingConditions.DEFAULT);
+            LivingEntity livingentity = SkeletonBat.this.getTarget();
+            return livingentity != null && SkeletonBat.this.canAttack(livingentity, TargetingConditions.DEFAULT);
         }
     }
 
-    class LargeBatAttackStrategyGoal extends Goal
+    class SkeletonBatAttackStrategyGoal extends Goal
     {
         private int nextSweepTick;
 
         public boolean canUse()
         {
-            LivingEntity livingentity = LargeBat.this.getTarget();
-            return livingentity != null && LargeBat.this.canAttack(LargeBat.this.getTarget(), TargetingConditions.DEFAULT);
+            LivingEntity livingentity = SkeletonBat.this.getTarget();
+            return livingentity != null && SkeletonBat.this.canAttack(SkeletonBat.this.getTarget(), TargetingConditions.DEFAULT);
         }
 
         public void start()
         {
             this.nextSweepTick = 10;
-            LargeBat.this.attackPhase = LargeBat.AttackPhase.SURROUND;
+            SkeletonBat.this.attackPhase = SkeletonBat.AttackPhase.SURROUND;
             this.setAnchorAboveTarget();
         }
 
         public void stop()
         {
-            LargeBat.this.anchorPoint = LargeBat.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, LargeBat.this.anchorPoint).above(10 + LargeBat.this.random.nextInt(20));
+            SkeletonBat.this.anchorPoint = SkeletonBat.this.level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, SkeletonBat.this.anchorPoint).above(10 + SkeletonBat.this.random.nextInt(20));
         }
 
         public void tick()
         {
-            if (LargeBat.this.attackPhase == LargeBat.AttackPhase.SURROUND)
+            if (SkeletonBat.this.attackPhase == SkeletonBat.AttackPhase.SURROUND)
             {
                 --this.nextSweepTick;
                 if (this.nextSweepTick <= 0)
                 {
-                    LargeBat.this.attackPhase = LargeBat.AttackPhase.ATTACK;
+                    SkeletonBat.this.attackPhase = SkeletonBat.AttackPhase.ATTACK;
                     this.setAnchorAboveTarget();
-                    this.nextSweepTick = (8 + LargeBat.this.random.nextInt(4)) * 20;
-                    LargeBat.this.playSound(SoundEvents.BAT_TAKEOFF, 5.0F, 0.95F + LargeBat.this.random.nextFloat() * 0.1F);
+                    this.nextSweepTick = (8 + SkeletonBat.this.random.nextInt(4)) * 20;
+                    SkeletonBat.this.playSound(SoundEvents.BAT_TAKEOFF, 5.0F, 0.95F + SkeletonBat.this.random.nextFloat() * 0.1F);
                 }
             }
         }
 
         private void setAnchorAboveTarget()
         {
-            LargeBat.this.anchorPoint = LargeBat.this.getTarget().blockPosition().above(20 + LargeBat.this.random.nextInt(20));
-            if (LargeBat.this.anchorPoint.getY() < LargeBat.this.level.getSeaLevel())
+            SkeletonBat.this.anchorPoint = SkeletonBat.this.getTarget().blockPosition().above(20 + SkeletonBat.this.random.nextInt(20));
+            if (SkeletonBat.this.anchorPoint.getY() < SkeletonBat.this.level.getSeaLevel())
             {
-                LargeBat.this.anchorPoint = new BlockPos(LargeBat.this.anchorPoint.getX(), LargeBat.this.level.getSeaLevel() + 1, LargeBat.this.anchorPoint.getZ());
+                SkeletonBat.this.anchorPoint = new BlockPos(SkeletonBat.this.anchorPoint.getX(), SkeletonBat.this.level.getSeaLevel() + 1, SkeletonBat.this.anchorPoint.getZ());
             }
         }
     }
 
-    class LargeBatBodyRotationControl extends BodyRotationControl
+    class SkeletonBatBodyRotationControl extends BodyRotationControl
     {
-        public LargeBatBodyRotationControl(Mob p_33216_)
+        public SkeletonBatBodyRotationControl(Mob p_33216_)
         {
             super(p_33216_);
         }
 
         public void clientTick()
         {
-            LargeBat.this.yHeadRot = LargeBat.this.yBodyRot;
-            LargeBat.this.yBodyRot = LargeBat.this.getYRot();
+            SkeletonBat.this.yHeadRot = SkeletonBat.this.yBodyRot;
+            SkeletonBat.this.yBodyRot = SkeletonBat.this.getYRot();
         }
     }
 
-    class LargeBatCircleAroundAnchorGoal extends LargeBatMoveTargetGoal
+    class SkeletonBatCircleAroundAnchorGoal extends SkeletonBatMoveTargetGoal
     {
         private float angle;
         private float distance;
@@ -367,25 +367,25 @@ public class LargeBat extends FlyingMob implements Enemy
 
         public boolean canUse()
         {
-            return LargeBat.this.getTarget() == null || LargeBat.this.attackPhase == LargeBat.AttackPhase.SURROUND;
+            return SkeletonBat.this.getTarget() == null || SkeletonBat.this.attackPhase == SkeletonBat.AttackPhase.SURROUND;
         }
 
         public void start()
         {
-            this.distance = 5.0F + LargeBat.this.random.nextFloat() * 10.0F;
-            this.height = -4.0F + LargeBat.this.random.nextFloat() * 9.0F;
-            this.clockwise = LargeBat.this.random.nextBoolean() ? 1.0F : -1.0F;
+            this.distance = 5.0F + SkeletonBat.this.random.nextFloat() * 10.0F;
+            this.height = -4.0F + SkeletonBat.this.random.nextFloat() * 9.0F;
+            this.clockwise = SkeletonBat.this.random.nextBoolean() ? 1.0F : -1.0F;
             this.selectNext();
         }
 
         public void tick()
         {
-            if (LargeBat.this.random.nextInt(350) == 0)
+            if (SkeletonBat.this.random.nextInt(350) == 0)
             {
-                this.height = -4.0F + LargeBat.this.random.nextFloat() * 9.0F;
+                this.height = -4.0F + SkeletonBat.this.random.nextFloat() * 9.0F;
             }
 
-            if (LargeBat.this.random.nextInt(250) == 0)
+            if (SkeletonBat.this.random.nextInt(250) == 0)
             {
                 ++this.distance;
                 if (this.distance > 15.0F)
@@ -395,9 +395,9 @@ public class LargeBat extends FlyingMob implements Enemy
                 }
             }
 
-            if (LargeBat.this.random.nextInt(450) == 0)
+            if (SkeletonBat.this.random.nextInt(450) == 0)
             {
-                this.angle = LargeBat.this.random.nextFloat() * 2.0F * (float) Math.PI;
+                this.angle = SkeletonBat.this.random.nextFloat() * 2.0F * (float) Math.PI;
                 this.selectNext();
             }
 
@@ -406,50 +406,49 @@ public class LargeBat extends FlyingMob implements Enemy
                 this.selectNext();
             }
 
-            if (LargeBat.this.moveTargetPoint.y < LargeBat.this.getY() && !LargeBat.this.level.isEmptyBlock(LargeBat.this.blockPosition().below(1)))
+            if (SkeletonBat.this.moveTargetPoint.y < SkeletonBat.this.getY() && !SkeletonBat.this.level.isEmptyBlock(SkeletonBat.this.blockPosition().below(1)))
             {
                 this.height = Math.max(1.0F, this.height);
                 this.selectNext();
             }
 
-            if (LargeBat.this.moveTargetPoint.y > LargeBat.this.getY() && !LargeBat.this.level.isEmptyBlock(LargeBat.this.blockPosition().above(1)))
+            if (SkeletonBat.this.moveTargetPoint.y > SkeletonBat.this.getY() && !SkeletonBat.this.level.isEmptyBlock(SkeletonBat.this.blockPosition().above(1)))
             {
                 this.height = Math.min(-1.0F, this.height);
                 this.selectNext();
             }
-
         }
 
         private void selectNext()
         {
-            if (BlockPos.ZERO.equals(LargeBat.this.anchorPoint))
+            if (BlockPos.ZERO.equals(SkeletonBat.this.anchorPoint))
             {
-                LargeBat.this.anchorPoint = LargeBat.this.blockPosition();
+                SkeletonBat.this.anchorPoint = SkeletonBat.this.blockPosition();
             }
             this.angle += this.clockwise * 15.0F * ((float) Math.PI / 180F);
-            LargeBat.this.moveTargetPoint = Vec3.atLowerCornerOf(LargeBat.this.anchorPoint).add(this.distance * Mth.cos(this.angle), -4.0F + this.height, this.distance * Mth.sin(this.angle));
+            SkeletonBat.this.moveTargetPoint = Vec3.atLowerCornerOf(SkeletonBat.this.anchorPoint).add(this.distance * Mth.cos(this.angle), -4.0F + this.height, this.distance * Mth.sin(this.angle));
         }
     }
 
-    class LargeBatMoveControl extends MoveControl
+    class SkeletonBatMoveControl extends MoveControl
     {
         private float speed = 0.1F;
 
-        public LargeBatMoveControl(Mob p_33241_)
+        public SkeletonBatMoveControl(Mob p_33241_)
         {
             super(p_33241_);
         }
 
         public void tick()
         {
-            if (LargeBat.this.horizontalCollision)
+            if (SkeletonBat.this.horizontalCollision)
             {
-                LargeBat.this.setYRot(LargeBat.this.getYRot() + 180.0F);
+                SkeletonBat.this.setYRot(SkeletonBat.this.getYRot() + 180.0F);
                 this.speed = 0.1F;
             }
-            float f = (float) (LargeBat.this.moveTargetPoint.x - LargeBat.this.getX());
-            float f1 = (float) (LargeBat.this.moveTargetPoint.y - LargeBat.this.getY());
-            float f2 = (float) (LargeBat.this.moveTargetPoint.z - LargeBat.this.getZ());
+            float f = (float) (SkeletonBat.this.moveTargetPoint.x - SkeletonBat.this.getX());
+            float f1 = (float) (SkeletonBat.this.moveTargetPoint.y - SkeletonBat.this.getY());
+            float f2 = (float) (SkeletonBat.this.moveTargetPoint.z - SkeletonBat.this.getZ());
             double d0 = Mth.sqrt(f * f + f2 * f2);
             if (Math.abs(d0) > (double) 1.0E-5F)
             {
@@ -458,13 +457,13 @@ public class LargeBat extends FlyingMob implements Enemy
                 f2 = (float) ((double) f2 * d1);
                 d0 = Mth.sqrt(f * f + f2 * f2);
                 double d2 = Mth.sqrt(f * f + f2 * f2 + f1 * f1);
-                float f3 = LargeBat.this.getYRot();
+                float f3 = SkeletonBat.this.getYRot();
                 float f4 = (float) Mth.atan2(f2, f);
-                float f5 = Mth.wrapDegrees(LargeBat.this.getYRot() + 90.0F);
+                float f5 = Mth.wrapDegrees(SkeletonBat.this.getYRot() + 90.0F);
                 float f6 = Mth.wrapDegrees(f4 * (180F / (float) Math.PI));
-                LargeBat.this.setYRot(Mth.approachDegrees(f5, f6, 4.0F) - 90.0F);
-                LargeBat.this.yBodyRot = LargeBat.this.getYRot();
-                if (Mth.degreesDifferenceAbs(f3, LargeBat.this.getYRot()) < 3.0F)
+                SkeletonBat.this.setYRot(Mth.approachDegrees(f5, f6, 4.0F) - 90.0F);
+                SkeletonBat.this.yBodyRot = SkeletonBat.this.getYRot();
+                if (Mth.degreesDifferenceAbs(f3, SkeletonBat.this.getYRot()) < 3.0F)
                 {
                     this.speed = Mth.approach(this.speed, 1.8F, 0.005F * (1.8F / this.speed));
                 }
@@ -473,40 +472,40 @@ public class LargeBat extends FlyingMob implements Enemy
                     this.speed = Mth.approach(this.speed, 0.2F, 0.025F);
                 }
                 float f7 = (float) (-(Mth.atan2(-f1, d0) * (double) (180F / (float) Math.PI)));
-                LargeBat.this.setXRot(f7);
-                float f8 = LargeBat.this.getYRot() + 90.0F;
+                SkeletonBat.this.setXRot(f7);
+                float f8 = SkeletonBat.this.getYRot() + 90.0F;
                 double d3 = (double) (this.speed * Mth.cos(f8 * ((float) Math.PI / 180F))) * Math.abs((double) f / d2);
                 double d4 = (double) (this.speed * Mth.sin(f8 * ((float) Math.PI / 180F))) * Math.abs((double) f2 / d2);
                 double d5 = (double) (this.speed * Mth.sin(f7 * ((float) Math.PI / 180F))) * Math.abs((double) f1 / d2);
-                Vec3 vec3 = LargeBat.this.getDeltaMovement();
-                LargeBat.this.setDeltaMovement(vec3.add((new Vec3(d3, d5, d4)).subtract(vec3).scale(0.2D)));
+                Vec3 vec3 = SkeletonBat.this.getDeltaMovement();
+                SkeletonBat.this.setDeltaMovement(vec3.add((new Vec3(d3, d5, d4)).subtract(vec3).scale(0.2D)));
             }
         }
     }
 
-    abstract class LargeBatMoveTargetGoal extends Goal
+    abstract class SkeletonBatMoveTargetGoal extends Goal
     {
-        public LargeBatMoveTargetGoal()
+        public SkeletonBatMoveTargetGoal()
         {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
         }
 
         protected boolean touchingTarget()
         {
-            return LargeBat.this.moveTargetPoint.distanceToSqr(LargeBat.this.getX(), LargeBat.this.getY(), LargeBat.this.getZ()) < 4.0D;
+            return SkeletonBat.this.moveTargetPoint.distanceToSqr(SkeletonBat.this.getX(), SkeletonBat.this.getY(), SkeletonBat.this.getZ()) < 4.0D;
         }
     }
 
-    class LargeBatSweepAttackGoal extends LargeBatMoveTargetGoal
+    class SkeletonBatSweepAttackGoal extends SkeletonBatMoveTargetGoal
     {
         public boolean canUse()
         {
-            return LargeBat.this.getTarget() != null && LargeBat.this.attackPhase == LargeBat.AttackPhase.ATTACK;
+            return SkeletonBat.this.getTarget() != null && SkeletonBat.this.attackPhase == SkeletonBat.AttackPhase.ATTACK;
         }
 
         public boolean canContinueToUse()
         {
-            LivingEntity livingentity = LargeBat.this.getTarget();
+            LivingEntity livingentity = SkeletonBat.this.getTarget();
             if (livingentity == null)
             {
                 return false;
@@ -523,9 +522,9 @@ public class LargeBat extends FlyingMob implements Enemy
                 }
                 else
                 {
-                    if (LargeBat.this.tickCount % 20 == 0)
+                    if (SkeletonBat.this.tickCount % 20 == 0)
                     {
-                        List<Cat> list = LargeBat.this.level.getEntitiesOfClass(Cat.class, LargeBat.this.getBoundingBox().inflate(16.0D), EntitySelector.ENTITY_STILL_ALIVE);
+                        List<Cat> list = SkeletonBat.this.level.getEntitiesOfClass(Cat.class, SkeletonBat.this.getBoundingBox().inflate(16.0D), EntitySelector.ENTITY_STILL_ALIVE);
                         if (!list.isEmpty())
                         {
                             for (Cat cat : list)
@@ -550,26 +549,26 @@ public class LargeBat extends FlyingMob implements Enemy
 
         public void stop()
         {
-            LargeBat.this.setTarget(null);
-            LargeBat.this.attackPhase = LargeBat.AttackPhase.SURROUND;
+            SkeletonBat.this.setTarget(null);
+            SkeletonBat.this.attackPhase = SkeletonBat.AttackPhase.SURROUND;
         }
 
         public void tick()
         {
-            LivingEntity livingentity = LargeBat.this.getTarget();
-            LargeBat.this.moveTargetPoint = new Vec3(livingentity.getX(), livingentity.getY(0.5D), livingentity.getZ());
-            if (LargeBat.this.getBoundingBox().inflate(0.2F).intersects(livingentity.getBoundingBox()))
+            LivingEntity livingentity = SkeletonBat.this.getTarget();
+            SkeletonBat.this.moveTargetPoint = new Vec3(livingentity.getX(), livingentity.getY(0.5D), livingentity.getZ());
+            if (SkeletonBat.this.getBoundingBox().inflate(0.2F).intersects(livingentity.getBoundingBox()))
             {
-                LargeBat.this.doHurtTarget(livingentity);
-                LargeBat.this.attackPhase = LargeBat.AttackPhase.SURROUND;
-                if (!LargeBat.this.isSilent())
+                SkeletonBat.this.doHurtTarget(livingentity);
+                SkeletonBat.this.attackPhase = SkeletonBat.AttackPhase.SURROUND;
+                if (!SkeletonBat.this.isSilent())
                 {
-                    LargeBat.this.level.levelEvent(1039, LargeBat.this.blockPosition(), 0);
+                    SkeletonBat.this.level.levelEvent(1039, SkeletonBat.this.blockPosition(), 0);
                 }
             }
-            else if (LargeBat.this.horizontalCollision || LargeBat.this.hurtTime > 0)
+            else if (SkeletonBat.this.horizontalCollision || SkeletonBat.this.hurtTime > 0)
             {
-                LargeBat.this.attackPhase = LargeBat.AttackPhase.SURROUND;
+                SkeletonBat.this.attackPhase = SkeletonBat.AttackPhase.SURROUND;
             }
         }
     }

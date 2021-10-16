@@ -21,6 +21,7 @@ public class BatJockeysSpawning
             return;
         }
         MobSpawnInfoBuilder spawns = event.getSpawns();
-        spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(BatJockeysRegistry.LARGE_BAT.get(), ConfigHandler.SPAWNING.batjockey_weight.get(), ConfigHandler.SPAWNING.batjockey_min.get(), ConfigHandler.SPAWNING.batjockey_max.get()));
+        spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(BatJockeysRegistry.SKELETON_BAT.get(), ConfigHandler.SKELETON_BAT_SETTINGS.spawn_weight.get(), ConfigHandler.SKELETON_BAT_SETTINGS.min_group_size.get(), ConfigHandler.SKELETON_BAT_SETTINGS.max_group_size.get()));
+        spawns.addSpawn(MobCategory.MONSTER, new MobSpawnSettings.SpawnerData(BatJockeysRegistry.VEX_BAT.get(), ConfigHandler.VEX_BAT_SETTINGS.spawn_weight.get(), ConfigHandler.VEX_BAT_SETTINGS.min_group_size.get(), ConfigHandler.VEX_BAT_SETTINGS.max_group_size.get()));
     }
 }

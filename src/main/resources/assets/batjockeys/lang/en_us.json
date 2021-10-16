@@ -1,4 +1,6 @@
 {
-  "entity.batjockeys.large_bat": "Large Bat",
-  "item.batjockeys.large_bat_spawn_egg": "Large Bat Spawn Egg"
+  "entity.batjockeys.skeleton_bat": "Skeleton Bat",
+  "item.batjockeys.skeleton_bat_spawn_egg": "Skeleton Bat Spawn Egg",
+  "entity.batjockeys.vex_bat": "Vex Bat",
+  "item.batjockeys.vex_bat_spawn_egg": "Vex Bat Spawn Egg"
 }

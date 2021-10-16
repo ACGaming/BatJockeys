@@ -15,17 +15,17 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import mod.acgaming.batjockeys.entity.LargeBat;
+import mod.acgaming.batjockeys.entity.SkeletonBat;
 
 @OnlyIn(Dist.CLIENT)
-public class LargeBatModel extends HierarchicalModel<LargeBat>
+public class SkeletonBatModel extends HierarchicalModel<SkeletonBat>
 {
-    public static ModelLayerLocation LARGE_BAT_LAYER = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "large_bat");
+    public static ModelLayerLocation SKELETON_BAT_LAYER = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "skeleton_bat");
 
     @SubscribeEvent
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event)
     {
-        event.registerLayerDefinition(LARGE_BAT_LAYER, LargeBatModel::createBodyLayer);
+        event.registerLayerDefinition(SKELETON_BAT_LAYER, SkeletonBatModel::createBodyLayer);
     }
 
     public static LayerDefinition createBodyLayer()
@@ -51,7 +51,7 @@ public class LargeBatModel extends HierarchicalModel<LargeBat>
     private final ModelPart rightWingTip;
     private final ModelPart leftWingTip;
 
-    public LargeBatModel(ModelPart p_170427_)
+    public SkeletonBatModel(ModelPart p_170427_)
     {
         this.root = p_170427_;
         this.head = p_170427_.getChild("head");
@@ -67,7 +67,7 @@ public class LargeBatModel extends HierarchicalModel<LargeBat>
         return this.root;
     }
 
-    public void setupAnim(LargeBat p_102200_, float p_102201_, float p_102202_, float p_102203_, float p_102204_, float p_102205_)
+    public void setupAnim(SkeletonBat p_102200_, float p_102201_, float p_102202_, float p_102203_, float p_102204_, float p_102205_)
     {
         this.head.xRot = p_102205_ * ((float) Math.PI / 180F);
         this.head.yRot = p_102204_ * ((float) Math.PI / 180F);

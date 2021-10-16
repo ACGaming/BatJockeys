@@ -1,4 +1,6 @@
 {
-  "entity.batjockeys.large_bat": "Große Fledermaus",
-  "item.batjockeys.large_bat_spawn_egg": "Große Fledermaus-Spawnei"
+  "entity.batjockeys.skeleton_bat": "Skelettfledermaus",
+  "item.batjockeys.skeleton_bat_spawn_egg": "Skelettfledermaus-Spawnei",
+  "entity.batjockeys.vex_bat": "Plagegeistfledermaus",
+  "item.batjockeys.vex_bat_spawn_egg": "Plagegeistfledermaus-Spawnei"
 }
