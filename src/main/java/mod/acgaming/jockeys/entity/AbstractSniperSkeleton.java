@@ -6,7 +6,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -34,12 +33,16 @@ import mod.acgaming.jockeys.config.ConfigHandler;
 
 public abstract class AbstractSniperSkeleton extends Monster implements RangedAttackMob
 {
+    public static double attack_range = ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.attack_range.get();
+    public static int attack_interval = ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.attack_interval.get();
+
     public static AttributeSupplier.Builder createAttributes()
     {
-        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.attack_range.get());
+        return Monster.createMonsterAttributes().add(Attributes.MOVEMENT_SPEED, 0.25D).add(Attributes.FOLLOW_RANGE, attack_range);
     }
 
-    private final RangedBowAttackGoal<AbstractSniperSkeleton> bowGoal = new RangedBowAttackGoal<>(this, 1.0D, 40, 100.0F);
+    private final RangedBowAttackGoal<AbstractSniperSkeleton> bowGoal = new RangedBowAttackGoal<>(this, 1.0D, attack_interval, (float) attack_range);
+
     private final MeleeAttackGoal meleeGoal = new MeleeAttackGoal(this, 1.2D, false)
     {
         public void start()
@@ -118,20 +121,13 @@ public abstract class AbstractSniperSkeleton extends Monster implements RangedAt
             ItemStack itemstack = this.getItemInHand(ProjectileUtil.getWeaponHoldingHand(this, item -> item instanceof BowItem));
             if (itemstack.is(Items.BOW))
             {
-                int i = 40;
-                if (this.level.getDifficulty() != Difficulty.HARD)
-                {
-                    i = 80;
-                }
-
-                this.bowGoal.setMinAttackInterval(i);
+                this.bowGoal.setMinAttackInterval(attack_interval);
                 this.goalSelector.addGoal(4, this.bowGoal);
             }
             else
             {
                 this.goalSelector.addGoal(4, this.meleeGoal);
             }
-
         }
     }
 
@@ -161,7 +157,7 @@ public abstract class AbstractSniperSkeleton extends Monster implements RangedAt
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0D));
         this.goalSelector.addGoal(3, new AvoidEntityGoal<>(this, Wolf.class, 6.0F, 1.0D, 1.2D));
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0D));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 100.0F));
+        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, (float) attack_range));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));

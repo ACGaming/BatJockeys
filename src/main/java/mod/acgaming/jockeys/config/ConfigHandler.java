@@ -97,13 +97,14 @@ public class ConfigHandler
         public final ForgeConfigSpec.IntValue min_group_size;
         public final ForgeConfigSpec.IntValue max_group_size;
         public final ForgeConfigSpec.IntValue spawn_weight;
-        public final ForgeConfigSpec.DoubleValue attack_range;
         public final ForgeConfigSpec.ConfigValue<String> jockey_head;
         public final ForgeConfigSpec.ConfigValue<String> jockey_chest;
         public final ForgeConfigSpec.ConfigValue<String> jockey_legs;
         public final ForgeConfigSpec.ConfigValue<String> jockey_feet;
         public final ForgeConfigSpec.ConfigValue<String> jockey_item_main;
         public final ForgeConfigSpec.ConfigValue<String> jockey_item_off;
+        public final ForgeConfigSpec.DoubleValue attack_range;
+        public final ForgeConfigSpec.IntValue attack_interval;
 
         WitherSkeletonGhastSettings(ForgeConfigSpec.Builder builder)
         {
@@ -148,6 +149,10 @@ public class ConfigHandler
             attack_range = builder
                 .comment("Attack range for jockeys")
                 .defineInRange("Wither Skeleton Ghast Jockey Attack Range", 100.0D, 1.0D, 100.0D);
+
+            attack_interval = builder
+                .comment("Attack interval for jockeys")
+                .defineInRange("Wither Skeleton Ghast Jockey Attack Interval", 40, 10, 1000);
 
             builder.pop();
         }
