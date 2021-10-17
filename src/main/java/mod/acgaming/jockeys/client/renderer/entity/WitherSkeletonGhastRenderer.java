@@ -29,6 +29,6 @@ public class WitherSkeletonGhastRenderer extends MobRenderer<WitherSkeletonGhast
 
     protected void scale(WitherSkeletonGhast p_114757_, PoseStack p_114758_, float p_114759_)
     {
-        p_114758_.scale(2.5F, 2.5F, 2.5F);
+        p_114758_.scale(3.0F, 3.0F, 3.0F);
     }
 }

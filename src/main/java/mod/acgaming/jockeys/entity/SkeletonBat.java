@@ -3,7 +3,6 @@ package mod.acgaming.jockeys.entity;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -13,7 +12,6 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -25,14 +23,14 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.animal.Cat;
-import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
 
@@ -40,16 +38,11 @@ import mod.acgaming.jockeys.Jockeys;
 import mod.acgaming.jockeys.config.ConfigHandler;
 import mod.acgaming.jockeys.config.RegistryHelper;
 
-public class SkeletonBat extends FlyingMob implements Enemy
+public class SkeletonBat extends Monster
 {
     public static AttributeSupplier.Builder createAttributes()
     {
         return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 10.0D).add(Attributes.FOLLOW_RANGE, 64.0D).add(Attributes.ATTACK_DAMAGE, 1.0D);
-    }
-
-    public static boolean checkSpawnRules(EntityType<SkeletonBat> p_32735_, LevelAccessor p_32736_, MobSpawnType p_32737_, BlockPos p_32738_, Random p_32739_)
-    {
-        return p_32736_.getDifficulty() != Difficulty.PEACEFUL && p_32739_.nextInt(20) == 0 && checkMobSpawnRules(p_32735_, p_32736_, p_32737_, p_32738_, p_32739_);
     }
 
     Vec3 moveTargetPoint = Vec3.ZERO;
@@ -62,10 +55,6 @@ public class SkeletonBat extends FlyingMob implements Enemy
         this.moveControl = new SkeletonBatMoveControl(this);
         this.lookControl = new SkeletonBatLookControl(this);
         this.xpReward = 5;
-        if (Jockeys.isHalloween())
-        {
-            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-        }
     }
 
     public boolean shouldRenderAtSqrDistance(double p_33107_)
@@ -78,6 +67,20 @@ public class SkeletonBat extends FlyingMob implements Enemy
         return SoundSource.HOSTILE;
     }
 
+    public void aiStep()
+    {
+        if (this.isAlive() && this.isSunBurnTick())
+        {
+            this.setSecondsOnFire(8);
+        }
+        super.aiStep();
+    }
+
+    protected boolean shouldDespawnInPeaceful()
+    {
+        return true;
+    }
+
     protected SoundEvent getHurtSound(DamageSource p_27451_)
     {
         return SoundEvents.BAT_HURT;
@@ -86,6 +89,20 @@ public class SkeletonBat extends FlyingMob implements Enemy
     protected SoundEvent getDeathSound()
     {
         return SoundEvents.BAT_DEATH;
+    }
+
+    protected void checkFallDamage(double p_20809_, boolean p_20810_, BlockState p_20811_, BlockPos p_20812_)
+    {
+    }
+
+    public boolean onClimbable()
+    {
+        return false;
+    }
+
+    public boolean causeFallDamage(float p_147105_, float p_147106_, DamageSource p_147107_)
+    {
+        return false;
     }
 
     public MobType getMobType()
@@ -101,6 +118,44 @@ public class SkeletonBat extends FlyingMob implements Enemy
     public float getVoicePitch()
     {
         return super.getVoicePitch() * 0.95F;
+    }
+
+    public void travel(Vec3 p_20818_)
+    {
+        if (this.isInWater())
+        {
+            this.moveRelative(0.02F, p_20818_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.8F));
+        }
+        else if (this.isInLava())
+        {
+            this.moveRelative(0.02F, p_20818_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
+        }
+        else
+        {
+            BlockPos ground = new BlockPos(this.getX(), this.getY() - 1.0D, this.getZ());
+            float f = 0.91F;
+            if (this.onGround)
+            {
+                f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
+            }
+
+            float f1 = 0.16277137F / (f * f * f);
+            f = 0.91F;
+            if (this.onGround)
+            {
+                f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
+            }
+
+            this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, p_20818_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(f));
+        }
+
+        this.calculateEntityAnimation(this, false);
     }
 
     public EntityDimensions getDimensions(Pose p_33113_)
@@ -184,23 +239,17 @@ public class SkeletonBat extends FlyingMob implements Enemy
         }
     }
 
-    public void aiStep()
-    {
-        if (this.isAlive() && this.isSunBurnTick())
-        {
-            this.setSecondsOnFire(8);
-        }
-        super.aiStep();
-    }
-
-    protected boolean shouldDespawnInPeaceful()
-    {
-        return true;
-    }
-
     protected void customServerAiStep()
     {
         super.customServerAiStep();
+    }
+
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_34172_)
+    {
+        if (Jockeys.isHalloween())
+        {
+            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+        }
     }
 
     @Nullable

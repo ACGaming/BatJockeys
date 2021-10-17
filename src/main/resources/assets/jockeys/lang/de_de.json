@@ -1,8 +1,10 @@
 {
-  "entity.jockeys.skeleton_bat": "Skelettfledermaus",
-  "item.jockeys.skeleton_bat_spawn_egg": "Skelettfledermaus-Spawnei",
-  "entity.jockeys.vex_bat": "Plagegeistfledermaus",
-  "item.jockeys.vex_bat_spawn_egg": "Plagegeistfledermaus-Spawnei",
-  "entity.jockeys.wither_skeleton_ghast": "Witherskelettghast",
-  "item.jockeys.wither_skeleton_ghast_spawn_egg": "Witherskelettghast-Spawnei"
+  "entity.jockeys.skeleton_bat": "Skelett-Fledermaus",
+  "item.jockeys.skeleton_bat_spawn_egg": "Skelett-Fledermaus-Spawnei",
+  "entity.jockeys.vex_bat": "Plagegeist-Fledermaus",
+  "item.jockeys.vex_bat_spawn_egg": "Plagegeist-Fledermaus-Spawnei",
+  "entity.jockeys.wither_skeleton_ghast": "Witherskelett-Ghast",
+  "item.jockeys.wither_skeleton_ghast_spawn_egg": "Witherskelett-Ghast-Spawnei",
+  "entity.jockeys.sniper_wither_skeleton": "Scharfschützen-Witherskelett",
+  "item.jockeys.sniper_wither_skeleton_spawn_egg": "Scharfschützen-Witherskelett-Spawnei"
 }

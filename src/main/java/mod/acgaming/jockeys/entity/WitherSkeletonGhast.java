@@ -22,8 +22,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.monster.Enemy;
-import net.minecraft.world.entity.monster.WitherSkeleton;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.LargeFireball;
 import net.minecraft.world.item.ItemStack;
@@ -31,14 +30,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import mod.acgaming.jockeys.Jockeys;
-import mod.acgaming.jockeys.config.ConfigHandler;
 import mod.acgaming.jockeys.config.RegistryHelper;
+import mod.acgaming.jockeys.init.JockeysRegistry;
 
-public class WitherSkeletonGhast extends FlyingMob implements Enemy
+public class WitherSkeletonGhast extends Monster
 {
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(WitherSkeletonGhast.class, EntityDataSerializers.BOOLEAN);
 
@@ -59,10 +59,6 @@ public class WitherSkeletonGhast extends FlyingMob implements Enemy
         super(p_32725_, p_32726_);
         this.moveControl = new WitherSkeletonGhast.GhastMoveControl(this);
         this.xpReward = 5;
-        if (Jockeys.isHalloween())
-        {
-            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-        }
     }
 
     public boolean isCharging()
@@ -78,6 +74,30 @@ public class WitherSkeletonGhast extends FlyingMob implements Enemy
     public int getExplosionPower()
     {
         return this.explosionPower;
+    }
+
+    public SoundSource getSoundSource()
+    {
+        return SoundSource.HOSTILE;
+    }
+
+    protected boolean shouldDespawnInPeaceful()
+    {
+        return true;
+    }
+
+    protected SoundEvent getHurtSound(DamageSource p_32750_)
+    {
+        return SoundEvents.GHAST_HURT;
+    }
+
+    protected SoundEvent getDeathSound()
+    {
+        return SoundEvents.GHAST_DEATH;
+    }
+
+    protected void checkFallDamage(double p_20809_, boolean p_20810_, BlockState p_20811_, BlockPos p_20812_)
+    {
     }
 
     public boolean hurt(DamageSource p_32730_, float p_32731_)
@@ -97,14 +117,14 @@ public class WitherSkeletonGhast extends FlyingMob implements Enemy
         }
     }
 
-    protected SoundEvent getHurtSound(DamageSource p_32750_)
+    public boolean onClimbable()
     {
-        return SoundEvents.GHAST_HURT;
+        return false;
     }
 
-    protected SoundEvent getDeathSound()
+    public boolean causeFallDamage(float p_147105_, float p_147106_, DamageSource p_147107_)
     {
-        return SoundEvents.GHAST_DEATH;
+        return false;
     }
 
     protected float getSoundVolume()
@@ -112,21 +132,54 @@ public class WitherSkeletonGhast extends FlyingMob implements Enemy
         return 5.0F;
     }
 
+    public void travel(Vec3 p_20818_)
+    {
+        if (this.isInWater())
+        {
+            this.moveRelative(0.02F, p_20818_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.8F));
+        }
+        else if (this.isInLava())
+        {
+            this.moveRelative(0.02F, p_20818_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(0.5D));
+        }
+        else
+        {
+            BlockPos ground = new BlockPos(this.getX(), this.getY() - 1.0D, this.getZ());
+            float f = 0.91F;
+            if (this.onGround)
+            {
+                f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
+            }
+
+            float f1 = 0.16277137F / (f * f * f);
+            f = 0.91F;
+            if (this.onGround)
+            {
+                f = this.level.getBlockState(ground).getFriction(this.level, ground, this) * 0.91F;
+            }
+
+            this.moveRelative(this.onGround ? 0.1F * f1 : 0.02F, p_20818_);
+            this.move(MoverType.SELF, this.getDeltaMovement());
+            this.setDeltaMovement(this.getDeltaMovement().scale(f));
+        }
+
+        this.calculateEntityAnimation(this, false);
+    }
+
     protected float getStandingEyeHeight(Pose p_32741_, EntityDimensions p_32742_)
     {
         return 2.6F;
-    }
-
-    public SoundSource getSoundSource()
-    {
-        return SoundSource.HOSTILE;
     }
 
     protected void registerGoals()
     {
         this.goalSelector.addGoal(5, new WitherSkeletonGhast.RandomFloatAroundGoal(this));
         this.goalSelector.addGoal(7, new WitherSkeletonGhast.GhastLookGoal(this));
-        this.goalSelector.addGoal(7, new WitherSkeletonGhast.GhastShootFireballGoal(this));
+        //this.goalSelector.addGoal(7, new WitherSkeletonGhast.GhastShootFireballGoal(this));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, 10, true, false, (p_32755_) -> Math.abs(p_32755_.getY() - this.getY()) <= 4.0D));
     }
 
@@ -175,40 +228,23 @@ public class WitherSkeletonGhast extends FlyingMob implements Enemy
         }
     }
 
-    protected boolean shouldDespawnInPeaceful()
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_34172_)
     {
-        return true;
-    }
-
-    public int getMaxSpawnClusterSize()
-    {
-        return 1;
+        if (Jockeys.isHalloween())
+        {
+            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
+        }
     }
 
     @Nullable
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType spawntype, @Nullable SpawnGroupData spawndata, @Nullable CompoundTag compoundtag)
     {
         spawndata = super.finalizeSpawn(level, difficulty, spawntype, spawndata, compoundtag);
-        WitherSkeleton wither_skeleton = EntityType.WITHER_SKELETON.create(this.level);
+        SniperWitherSkeleton wither_skeleton = JockeysRegistry.SNIPER_WITHER_SKELETON.get().create(this.level);
         if (wither_skeleton != null)
         {
             wither_skeleton.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
             wither_skeleton.finalizeSpawn(level, difficulty, spawntype, null, null);
-
-            if (Jockeys.isHalloween())
-            {
-                wither_skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-            }
-            else
-            {
-                wither_skeleton.setItemSlot(EquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockey_head.get())));
-            }
-            wither_skeleton.setItemSlot(EquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockey_chest.get())));
-            wither_skeleton.setItemSlot(EquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockey_legs.get())));
-            wither_skeleton.setItemSlot(EquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockey_feet.get())));
-            wither_skeleton.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockey_item_main.get())));
-            wither_skeleton.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockey_item_off.get())));
-
             wither_skeleton.startRiding(this);
         }
         return spawndata;

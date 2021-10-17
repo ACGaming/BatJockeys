@@ -28,15 +28,15 @@ public class ConfigHandler
 
             min_group_size = builder
                 .comment("Minimum amount per spawn")
-                .defineInRange("Skeleton Bat Min Group Size", 1, 1, 100);
+                .defineInRange("Skeleton Bat Min Group Size", 1, 1, 10);
 
             max_group_size = builder
                 .comment("Maximum amount per spawn")
-                .defineInRange("Skeleton Bat Max Group Size", 2, 1, 100);
+                .defineInRange("Skeleton Bat Max Group Size", 1, 1, 10);
 
             spawn_weight = builder
                 .comment("Chance to spawn")
-                .defineInRange("Skeleton Bat Spawn Weight", 60, 0, 200);
+                .defineInRange("Skeleton Bat Spawn Weight", 8, 0, 200);
 
             jockey_head = builder
                 .comment("Head armor for jockeys")
@@ -78,15 +78,15 @@ public class ConfigHandler
 
             min_group_size = builder
                 .comment("Minimum amount per spawn")
-                .defineInRange("Vex Bat Min Group Size", 1, 1, 100);
+                .defineInRange("Vex Bat Min Group Size", 1, 1, 10);
 
             max_group_size = builder
                 .comment("Maximum amount per spawn")
-                .defineInRange("Vex Bat Max Group Size", 2, 1, 100);
+                .defineInRange("Vex Bat Max Group Size", 1, 1, 10);
 
             spawn_weight = builder
                 .comment("Chance to spawn")
-                .defineInRange("Vex Bat Spawn Weight", 20, 0, 200);
+                .defineInRange("Vex Bat Spawn Weight", 4, 0, 200);
 
             builder.pop();
         }
@@ -97,6 +97,7 @@ public class ConfigHandler
         public final ForgeConfigSpec.IntValue min_group_size;
         public final ForgeConfigSpec.IntValue max_group_size;
         public final ForgeConfigSpec.IntValue spawn_weight;
+        public final ForgeConfigSpec.DoubleValue attack_range;
         public final ForgeConfigSpec.ConfigValue<String> jockey_head;
         public final ForgeConfigSpec.ConfigValue<String> jockey_chest;
         public final ForgeConfigSpec.ConfigValue<String> jockey_legs;
@@ -110,15 +111,15 @@ public class ConfigHandler
 
             min_group_size = builder
                 .comment("Minimum amount per spawn")
-                .defineInRange("Wither Skeleton Ghast Min Group Size", 1, 1, 100);
+                .defineInRange("Wither Skeleton Ghast Min Group Size", 1, 1, 10);
 
             max_group_size = builder
                 .comment("Maximum amount per spawn")
-                .defineInRange("Wither Skeleton Ghast Max Group Size", 2, 1, 100);
+                .defineInRange("Wither Skeleton Ghast Max Group Size", 1, 1, 10);
 
             spawn_weight = builder
                 .comment("Chance to spawn")
-                .defineInRange("Wither Skeleton Ghast Spawn Weight", 40, 0, 200);
+                .defineInRange("Wither Skeleton Ghast Spawn Weight", 6, 0, 200);
 
             jockey_head = builder
                 .comment("Head armor for jockeys")
@@ -142,7 +143,11 @@ public class ConfigHandler
 
             jockey_item_off = builder
                 .comment("Offhand item for jockeys")
-                .define("Wither Skeleton Ghast Jockey Off Item", "minecraft:fire_charge");
+                .define("Wither Skeleton Ghast Jockey Off Item", "minecraft:spyglass");
+
+            attack_range = builder
+                .comment("Attack range for jockeys")
+                .defineInRange("Wither Skeleton Ghast Jockey Attack Range", 100.0D, 1.0D, 100.0D);
 
             builder.pop();
         }

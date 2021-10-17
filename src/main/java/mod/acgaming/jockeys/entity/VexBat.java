@@ -62,10 +62,6 @@ public class VexBat extends Monster
         super(p_33984_, p_33985_);
         this.moveControl = new VexBatMoveControl(this);
         this.xpReward = 3;
-        if (Jockeys.isHalloween())
-        {
-            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
-        }
     }
 
     public void move(MoverType p_33997_, Vec3 p_33998_)
@@ -172,6 +168,14 @@ public class VexBat extends Monster
         if (p_34008_.contains("LifeTicks"))
         {
             this.setLimitedLife(p_34008_.getInt("LifeTicks"));
+        }
+    }
+
+    protected void populateDefaultEquipmentSlots(DifficultyInstance p_34172_)
+    {
+        if (Jockeys.isHalloween())
+        {
+            this.setItemSlot(EquipmentSlot.HEAD, new ItemStack(Blocks.CARVED_PUMPKIN));
         }
     }
 
