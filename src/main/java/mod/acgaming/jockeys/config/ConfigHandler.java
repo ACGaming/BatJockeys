@@ -36,7 +36,7 @@ public class ConfigHandler
 
             spawn_weight = builder
                 .comment("Chance to spawn")
-                .defineInRange("Skeleton Bat Spawn Weight", 8, 0, 200);
+                .defineInRange("Skeleton Bat Spawn Weight", 40, 0, 200);
 
             jockey_head = builder
                 .comment("Head armor for jockeys")
@@ -86,7 +86,7 @@ public class ConfigHandler
 
             spawn_weight = builder
                 .comment("Chance to spawn")
-                .defineInRange("Vex Bat Spawn Weight", 4, 0, 200);
+                .defineInRange("Vex Bat Spawn Weight", 20, 0, 200);
 
             builder.pop();
         }
@@ -120,7 +120,7 @@ public class ConfigHandler
 
             spawn_weight = builder
                 .comment("Chance to spawn")
-                .defineInRange("Wither Skeleton Ghast Spawn Weight", 6, 0, 200);
+                .defineInRange("Wither Skeleton Ghast Spawn Weight", 30, 0, 200);
 
             jockey_head = builder
                 .comment("Head armor for jockeys")
