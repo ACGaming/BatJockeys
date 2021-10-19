@@ -200,7 +200,7 @@ public class SkeletonBat extends Monster
             this.level.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY() + 1.0F, this.getZ(), 0.0D, 0.0D, 0.0D);
         }
 
-        if (Jockeys.trickortreat)
+        if (Jockeys.trickortreat && Jockeys.isHalloween())
         {
             if (this.random.nextInt(10000) == 0)
             {
@@ -208,10 +208,7 @@ public class SkeletonBat extends Monster
                 {
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_BURP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
                 }
-                if (Jockeys.isHalloween())
-                {
-                    this.spawnAtLocation(RegistryHelper.getItemValueFromName("trickortreat:skeleton_goodie_bag"));
-                }
+                this.spawnAtLocation(RegistryHelper.getItemValueFromName("trickortreat:skeleton_goodie_bag"));
             }
         }
     }

@@ -192,7 +192,7 @@ public class WitherSkeletonGhast extends Monster
     public void tick()
     {
         super.tick();
-        if (Jockeys.trickortreat)
+        if (Jockeys.trickortreat && Jockeys.isHalloween())
         {
             if (this.random.nextInt(10000) == 0)
             {
@@ -200,10 +200,7 @@ public class WitherSkeletonGhast extends Monster
                 {
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_BURP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
                 }
-                if (Jockeys.isHalloween())
-                {
-                    this.spawnAtLocation(RegistryHelper.getItemValueFromName("trickortreat:ghast_goodie_bag"));
-                }
+                this.spawnAtLocation(RegistryHelper.getItemValueFromName("trickortreat:ghast_goodie_bag"));
             }
         }
     }
