@@ -312,11 +312,11 @@ public class VexBat extends Monster
                 if (d0 < VexBat.this.getBoundingBox().getSize())
                 {
                     this.operation = MoveControl.Operation.WAIT;
-                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().scale(1.5D));
+                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().scale(0.5D));
                 }
                 else
                 {
-                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.15D / d0)));
+                    VexBat.this.setDeltaMovement(VexBat.this.getDeltaMovement().add(vec3.scale(this.speedModifier * 0.05D / d0)));
                     if (VexBat.this.getTarget() == null)
                     {
                         Vec3 vec31 = VexBat.this.getDeltaMovement();
