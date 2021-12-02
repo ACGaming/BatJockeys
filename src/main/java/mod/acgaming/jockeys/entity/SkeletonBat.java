@@ -37,6 +37,7 @@ import net.minecraft.world.phys.Vec3;
 import mod.acgaming.jockeys.Jockeys;
 import mod.acgaming.jockeys.config.ConfigHandler;
 import mod.acgaming.jockeys.config.RegistryHelper;
+import mod.acgaming.jockeys.entity.ai.LookForJockeyGoal;
 
 public class SkeletonBat extends Monster
 {
@@ -172,6 +173,7 @@ public class SkeletonBat extends Monster
 
     protected void registerGoals()
     {
+        this.goalSelector.addGoal(0, new LookForJockeyGoal(this, 1.0D, 0.5F, 64.0F));
         this.goalSelector.addGoal(1, new SkeletonBatAttackStrategyGoal());
         this.goalSelector.addGoal(2, new SkeletonBatSweepAttackGoal());
         this.goalSelector.addGoal(3, new SkeletonBatCircleAroundAnchorGoal());
@@ -209,6 +211,26 @@ public class SkeletonBat extends Monster
                     this.level.playLocalSound(this.getX(), this.getY(), this.getZ(), SoundEvents.PLAYER_BURP, this.getSoundSource(), 0.5F + this.random.nextFloat() * 0.05F, 0.95F + this.random.nextFloat() * 0.05F, false);
                 }
                 this.spawnAtLocation(RegistryHelper.getItemValueFromName("trickortreat:skeleton_goodie_bag"));
+            }
+        }
+
+        this.checkInsideBlocks();
+        List<Entity> list = this.level.getEntities(this, this.getBoundingBox().inflate(0.2F, -0.01F, 0.2F), EntitySelector.pushableBy(this));
+        if (!list.isEmpty())
+        {
+            for (Entity entity : list)
+            {
+                if (!entity.hasPassenger(this))
+                {
+                    if (!this.level.isClientSide && !entity.isPassenger() && entity instanceof Mob)
+                    {
+                        entity.startRiding(this);
+                    }
+                    else
+                    {
+                        this.push(entity);
+                    }
+                }
             }
         }
     }
