@@ -1,39 +1,50 @@
 package mod.acgaming.jockeys.client.renderer.entity;
 
-import net.minecraft.client.model.geom.ModelLayers;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderLiving;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import mod.acgaming.jockeys.entity.SkeletonBat;
 
-@OnlyIn(Dist.CLIENT)
-public class SkeletonBatRenderer extends MobRenderer<SkeletonBat, SkeletonBatModel>
+@SideOnly(Side.CLIENT)
+public class SkeletonBatRenderer extends RenderLiving<SkeletonBat>
 {
-    private static final ResourceLocation BAT_LOCATION = new ResourceLocation("textures/entity/bat.png");
+    public static final SkeletonBatRenderer.Factory FACTORY = new SkeletonBatRenderer.Factory();
+    public static final ResourceLocation BAT_TEXTURES = new ResourceLocation("textures/entity/bat.png");
 
-    public SkeletonBatRenderer(EntityRendererProvider.Context p_173929_)
+    public SkeletonBatRenderer(RenderManager renderManagerIn)
     {
-        super(p_173929_, new SkeletonBatModel(p_173929_.bakeLayer(ModelLayers.BAT)), 0.25F);
+        super(renderManagerIn, new SkeletonBatModel(), 0.25F);
     }
 
-    public ResourceLocation getTextureLocation(SkeletonBat p_113876_)
+    public ResourceLocation getEntityTexture(SkeletonBat entity)
     {
-        return BAT_LOCATION;
+        return BAT_TEXTURES;
     }
 
-    protected void setupRotations(SkeletonBat p_113882_, PoseStack p_113883_, float p_113884_, float p_113885_, float p_113886_)
+    public void applyRotations(SkeletonBat entityLiving, float p_77043_2_, float rotationYaw, float partialTicks)
     {
-        p_113883_.translate(0.0D, Mth.cos(p_113884_ * 0.3F) * 0.05F, 0.0D);
-        super.setupRotations(p_113882_, p_113883_, p_113884_, p_113885_, p_113886_);
+        GlStateManager.translate(0.0F, MathHelper.cos(p_77043_2_ * 0.15F) * 0.1F, 0.0F);
+        super.applyRotations(entityLiving, p_77043_2_, rotationYaw, partialTicks);
     }
 
-    protected void scale(SkeletonBat p_113878_, PoseStack p_113879_, float p_113880_)
+    public void preRenderCallback(SkeletonBat entitylivingbaseIn, float partialTickTime)
     {
-        p_113879_.scale(1.05F, 1.05F, 1.05F);
+        GlStateManager.scale(1.05F, 1.05F, 1.05F);
+    }
+
+    public static class Factory implements IRenderFactory<SkeletonBat>
+    {
+        @Override
+        public Render<? super SkeletonBat> createRenderFor(RenderManager manager)
+        {
+            return new SkeletonBatRenderer(manager);
+        }
     }
 }

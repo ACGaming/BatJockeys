@@ -1,0 +1,18 @@
+[
+  {
+    "modid": "jockeys",
+    "name": "Spooky Scary Jockeys",
+    "description": "Putting the 'trick' back into trick or treat",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "https://github.com/ACGaming/Jockeys/tree/1.12.2",
+    "updateUrl": "",
+    "authorList": [
+      "ACGaming"
+    ],
+    "credits": "",
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

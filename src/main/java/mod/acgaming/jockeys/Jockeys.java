@@ -1,37 +1,27 @@
 package mod.acgaming.jockeys;
 
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mod.acgaming.jockeys.client.ClientHandler;
-import mod.acgaming.jockeys.config.ConfigHandler;
-import mod.acgaming.jockeys.init.JockeysRegistry;
 
-@Mod(Jockeys.MOD_ID)
+@Mod(modid = Jockeys.MODID, version = Jockeys.VERSION, acceptedMinecraftVersions = "[1.12.2]")
 public class Jockeys
 {
-    public static final String MOD_ID = "jockeys";
-    public static final Logger LOGGER = LogManager.getLogger();
+    public static final String MODID = "jockeys";
+    public static final String VERSION = "1.12.2-1.0.0";
 
-    public static boolean trickortreat;
-
-    public static void register(IEventBus modBus)
-    {
-        JockeysRegistry.ENTITIES.register(modBus);
-        JockeysRegistry.ITEMS.register(modBus);
-    }
+    @Instance
+    public static Jockeys instance;
 
     public static boolean isHalloween()
     {
@@ -41,31 +31,25 @@ public class Jockeys
         return month == 10 && day >= 1 || month == 11 && day <= 1;
     }
 
-    public Jockeys()
+    @SideOnly(Side.CLIENT)
+    @EventHandler
+    public void preInitClient(FMLPreInitializationEvent event)
     {
-        final IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ConfigHandler.SPEC);
-        eventBus.register(ConfigHandler.class);
-
-        eventBus.addListener(this::setup);
-        eventBus.addListener(this::setupClient);
-
-        register(eventBus);
-
-        if (ModList.get().isLoaded("trickortreat"))
-        {
-            trickortreat = true;
-        }
+        ClientHandler.initModels();
     }
 
-    public void setup(final FMLCommonSetupEvent event)
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event)
     {
-
     }
 
-    public void setupClient(final FMLClientSetupEvent event)
+    @EventHandler
+    public void init(FMLInitializationEvent event)
     {
-        ClientHandler.init();
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
     }
 }

@@ -1,85 +1,76 @@
 package mod.acgaming.jockeys.client.renderer.entity;
 
-import net.minecraft.client.model.HierarchicalModel;
-import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.model.geom.ModelPart;
-import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import mod.acgaming.jockeys.entity.SkeletonBat;
-
-@OnlyIn(Dist.CLIENT)
-public class SkeletonBatModel extends HierarchicalModel<SkeletonBat>
+@SideOnly(Side.CLIENT)
+public class SkeletonBatModel extends ModelBase
 {
-    public static ModelLayerLocation SKELETON_BAT_LAYER = new ModelLayerLocation(new ResourceLocation("minecraft:player"), "skeleton_bat");
+    public final ModelRenderer batHead;
+    public final ModelRenderer batBody;
+    public final ModelRenderer batRightWing;
+    public final ModelRenderer batLeftWing;
+    public final ModelRenderer batOuterRightWing;
+    public final ModelRenderer batOuterLeftWing;
 
-    @SubscribeEvent
-    public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event)
+    public SkeletonBatModel()
     {
-        event.registerLayerDefinition(SKELETON_BAT_LAYER, SkeletonBatModel::createBodyLayer);
+        this.textureWidth = 64;
+        this.textureHeight = 64;
+        this.batHead = new ModelRenderer(this, 0, 0);
+        this.batHead.addBox(-3.0F, -3.0F, -3.0F, 6, 6, 6);
+        ModelRenderer modelrenderer = new ModelRenderer(this, 24, 0);
+        modelrenderer.addBox(-4.0F, -6.0F, -2.0F, 3, 4, 1);
+        this.batHead.addChild(modelrenderer);
+        ModelRenderer modelrenderer1 = new ModelRenderer(this, 24, 0);
+        modelrenderer1.mirror = true;
+        modelrenderer1.addBox(1.0F, -6.0F, -2.0F, 3, 4, 1);
+        this.batHead.addChild(modelrenderer1);
+        this.batBody = new ModelRenderer(this, 0, 16);
+        this.batBody.addBox(-3.0F, 4.0F, -3.0F, 6, 12, 6);
+        this.batBody.setTextureOffset(0, 34).addBox(-5.0F, 16.0F, 0.0F, 10, 6, 1);
+        this.batRightWing = new ModelRenderer(this, 42, 0);
+        this.batRightWing.addBox(-12.0F, 1.0F, 1.5F, 10, 16, 1);
+        this.batOuterRightWing = new ModelRenderer(this, 24, 16);
+        this.batOuterRightWing.setRotationPoint(-12.0F, 1.0F, 1.5F);
+        this.batOuterRightWing.addBox(-8.0F, 1.0F, 0.0F, 8, 12, 1);
+        this.batLeftWing = new ModelRenderer(this, 42, 0);
+        this.batLeftWing.mirror = true;
+        this.batLeftWing.addBox(2.0F, 1.0F, 1.5F, 10, 16, 1);
+        this.batOuterLeftWing = new ModelRenderer(this, 24, 16);
+        this.batOuterLeftWing.mirror = true;
+        this.batOuterLeftWing.setRotationPoint(12.0F, 1.0F, 1.5F);
+        this.batOuterLeftWing.addBox(0.0F, 1.0F, 0.0F, 8, 12, 1);
+        this.batBody.addChild(this.batRightWing);
+        this.batBody.addChild(this.batLeftWing);
+        this.batRightWing.addChild(this.batOuterRightWing);
+        this.batLeftWing.addChild(this.batOuterLeftWing);
     }
 
-    public static LayerDefinition createBodyLayer()
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
-        MeshDefinition meshdefinition = new MeshDefinition();
-        PartDefinition partdefinition = meshdefinition.getRoot();
-        PartDefinition partdefinition1 = partdefinition.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 0).addBox(-3.0F, -3.0F, -3.0F, 6.0F, 6.0F, 6.0F), PartPose.ZERO);
-        partdefinition1.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(24, 0).addBox(-4.0F, -6.0F, -2.0F, 3.0F, 4.0F, 1.0F), PartPose.ZERO);
-        partdefinition1.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(24, 0).mirror().addBox(1.0F, -6.0F, -2.0F, 3.0F, 4.0F, 1.0F), PartPose.ZERO);
-        PartDefinition partdefinition2 = partdefinition.addOrReplaceChild("body", CubeListBuilder.create().texOffs(0, 16).addBox(-3.0F, 4.0F, -3.0F, 6.0F, 12.0F, 6.0F).texOffs(0, 34).addBox(-5.0F, 16.0F, 0.0F, 10.0F, 6.0F, 1.0F), PartPose.ZERO);
-        PartDefinition partdefinition3 = partdefinition2.addOrReplaceChild("right_wing", CubeListBuilder.create().texOffs(42, 0).addBox(-12.0F, 1.0F, 1.5F, 10.0F, 16.0F, 1.0F), PartPose.ZERO);
-        partdefinition3.addOrReplaceChild("right_wing_tip", CubeListBuilder.create().texOffs(24, 16).addBox(-8.0F, 1.0F, 0.0F, 8.0F, 12.0F, 1.0F), PartPose.offset(-12.0F, 1.0F, 1.5F));
-        PartDefinition partdefinition4 = partdefinition2.addOrReplaceChild("left_wing", CubeListBuilder.create().texOffs(42, 0).mirror().addBox(2.0F, 1.0F, 1.5F, 10.0F, 16.0F, 1.0F), PartPose.ZERO);
-        partdefinition4.addOrReplaceChild("left_wing_tip", CubeListBuilder.create().texOffs(24, 16).mirror().addBox(0.0F, 1.0F, 0.0F, 8.0F, 12.0F, 1.0F), PartPose.offset(12.0F, 1.0F, 1.5F));
-        return LayerDefinition.create(meshdefinition, 64, 64);
+        this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+        this.batHead.render(scale);
+        this.batBody.render(scale);
     }
 
-    private final ModelPart root;
-    private final ModelPart head;
-    private final ModelPart body;
-    private final ModelPart rightWing;
-    private final ModelPart leftWing;
-    private final ModelPart rightWingTip;
-    private final ModelPart leftWingTip;
-
-    public SkeletonBatModel(ModelPart p_170427_)
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
     {
-        this.root = p_170427_;
-        this.head = p_170427_.getChild("head");
-        this.body = p_170427_.getChild("body");
-        this.rightWing = this.body.getChild("right_wing");
-        this.rightWingTip = this.rightWing.getChild("right_wing_tip");
-        this.leftWing = this.body.getChild("left_wing");
-        this.leftWingTip = this.leftWing.getChild("left_wing_tip");
-    }
-
-    public ModelPart root()
-    {
-        return this.root;
-    }
-
-    public void setupAnim(SkeletonBat p_102200_, float p_102201_, float p_102202_, float p_102203_, float p_102204_, float p_102205_)
-    {
-        this.head.xRot = p_102205_ * ((float) Math.PI / 180F);
-        this.head.yRot = p_102204_ * ((float) Math.PI / 180F);
-        this.head.zRot = 0.0F;
-        this.head.setPos(0.0F, 0.0F, 0.0F);
-        this.rightWing.setPos(0.0F, 0.0F, 0.0F);
-        this.leftWing.setPos(0.0F, 0.0F, 0.0F);
-        this.body.xRot = ((float) Math.PI / 4F) + Mth.cos(p_102203_ * 0.1F) * 0.15F;
-        this.body.yRot = 0.0F;
-        this.rightWing.yRot = Mth.cos(p_102203_ * 25.0F * ((float) Math.PI / 180F)) * (float) Math.PI * 0.25F;
-        this.leftWing.yRot = -this.rightWing.yRot;
-        this.rightWingTip.yRot = this.rightWing.yRot * 0.5F;
-        this.leftWingTip.yRot = -this.rightWing.yRot * 0.5F;
+        this.batHead.rotateAngleX = headPitch * 0.017453292F;
+        this.batHead.rotateAngleY = netHeadYaw * 0.017453292F;
+        this.batHead.rotateAngleZ = 0.0F;
+        this.batHead.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.batRightWing.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.batLeftWing.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.batBody.rotateAngleX = ((float) Math.PI / 4F) + MathHelper.cos(ageInTicks * 0.1F) * 0.15F;
+        this.batBody.rotateAngleY = 0.0F;
+        this.batRightWing.rotateAngleY = MathHelper.cos(ageInTicks * 0.8F) * (float) Math.PI * 0.25F;
+        this.batLeftWing.rotateAngleY = -this.batRightWing.rotateAngleY;
+        this.batOuterRightWing.rotateAngleY = this.batRightWing.rotateAngleY * 0.5F;
+        this.batOuterLeftWing.rotateAngleY = -this.batRightWing.rotateAngleY * 0.5F;
     }
 }
