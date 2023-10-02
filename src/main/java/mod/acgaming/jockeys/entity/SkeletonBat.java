@@ -81,8 +81,6 @@ public class SkeletonBat extends EntityMob
                 this.dropItemWithOffset(RegistryHelper.getRandomHalloweenDrop(this.world), 1, 0.5F);
             }
         }
-
-        if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) this.setDead();
     }
 
     @Override
@@ -100,27 +98,23 @@ public class SkeletonBat extends EntityMob
     @Override
     public boolean getCanSpawnHere()
     {
-        if (this.world.getDifficulty() != EnumDifficulty.PEACEFUL) return false;
+        if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) return false;
 
         BlockPos blockpos = new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ);
 
-        if (blockpos.getY() >= this.world.getSeaLevel()) return false;
-        else
+        int i = this.world.getLightFromNeighbors(blockpos);
+        int j = 4;
+
+        if (Jockeys.isSpookySeason(this.world))
         {
-            int i = this.world.getLightFromNeighbors(blockpos);
-            int j = 4;
-
-            if (Jockeys.isSpookySeason(this.world))
-            {
-                j = 7;
-            }
-            else if (this.rand.nextBoolean())
-            {
-                return false;
-            }
-
-            return i <= this.rand.nextInt(j) && super.getCanSpawnHere();
+            j = 7;
         }
+        else if (this.rand.nextBoolean())
+        {
+            return false;
+        }
+
+        return i <= this.rand.nextInt(j) && super.getCanSpawnHere();
     }
 
     @Override
