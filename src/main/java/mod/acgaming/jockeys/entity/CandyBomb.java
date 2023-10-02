@@ -36,12 +36,6 @@ public class CandyBomb extends EntityFireball
         super(worldIn);
     }
 
-    @SideOnly(Side.CLIENT)
-    public CandyBomb(World worldIn, double x, double y, double z, double accelX, double accelY, double accelZ)
-    {
-        super(worldIn, x, y, z, accelX, accelY, accelZ);
-    }
-
     public CandyBomb(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
     {
         super(worldIn, shooter, accelX, accelY, accelZ);

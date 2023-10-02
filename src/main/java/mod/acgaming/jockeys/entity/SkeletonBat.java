@@ -194,9 +194,9 @@ public class SkeletonBat extends EntityMob
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingData)
     {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        livingData = super.onInitialSpawn(difficulty, livingData);
 
         EntitySkeleton skeleton = new EntitySkeleton(this.world);
         skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
@@ -213,7 +213,7 @@ public class SkeletonBat extends EntityMob
         skeleton.startRiding(this);
         this.rider = skeleton;
 
-        return livingdata;
+        return livingData;
     }
 
     @Override

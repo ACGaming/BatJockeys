@@ -38,7 +38,7 @@ public class JockeysRegistry
 
         // SPAWNING
         compileSpawningBiomes();
-        if (ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight, ConfigHandler.SKELETON_BAT_SETTINGS.minGroupSize, ConfigHandler.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, REGULAR_SPAWNING.toArray(new Biome[0]));
+        if (ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight, ConfigHandler.SKELETON_BAT_SETTINGS.minGroupSize, ConfigHandler.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, REGULAR_SPAWNING.toArray(new Biome[0]));
         if (ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, NETHER_SPAWNING.toArray(new Biome[0]));
     }
 

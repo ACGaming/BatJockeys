@@ -109,10 +109,6 @@ public class ConfigHandler
         @Config.Name("Wither Skeleton Ghast Follow Range")
         public double followRange = 100.0D;
 
-        @Config.Name("Wither Skeleton Ghast Ammo")
-        @Config.Comment("Shot items during Halloween")
-        public String[] drops = new String[] {"minecraft:cookie", "harvestcraft:jellybeansitem", "harvestcraft:peppermintitem", "harvestcraft:gummybearsitem", "harvestcraft:marzipanitem", "harvestcraft:slimegummiesitem", "harvestcraft:marshmellowsitem", "harvestcraft:chocolatebaritem"};
-
         @Config.Name("Wither Skeleton Ghast Jockey Head")
         @Config.Comment("Head armor for jockeys")
         public String jockeyHead = "minecraft:leather_helmet";

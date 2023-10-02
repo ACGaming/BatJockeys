@@ -65,8 +65,8 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     public void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(100.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.maxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.followRange);
     }
 
     @Override
@@ -114,25 +114,25 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
 
     @Override
     @Nullable
-    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata)
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingData)
     {
-        livingdata = super.onInitialSpawn(difficulty, livingdata);
+        livingData = super.onInitialSpawn(difficulty, livingData);
 
         EntityWitherSkeleton skeleton = new EntityWitherSkeleton(this.world);
         skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         skeleton.onInitialSpawn(difficulty, null);
-        skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.followRange);
+        skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.followRange);
         if (Jockeys.isSpookySeason()) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
-        else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyHead)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyChest)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyLegs)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyFeet)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemMainhand)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemOffhand)));
+        else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyHead)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyChest)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyLegs)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyFeet)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyItemMainhand)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyItemOffhand)));
         this.world.spawnEntity(skeleton);
         skeleton.startRiding(this);
 
-        return livingdata;
+        return livingData;
     }
 
     @SideOnly(Side.CLIENT)
