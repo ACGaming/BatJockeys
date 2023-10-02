@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import mod.acgaming.jockeys.Jockeys;
 
-@Config(modid = Jockeys.MODID, name = "Jockeys")
+@Config(modid = Jockeys.MOD_ID, name = "Jockeys")
 public class ConfigHandler
 {
     @Config.Comment("Skeleton Bat Settings")
@@ -28,6 +28,15 @@ public class ConfigHandler
         @Config.Comment("Chance to spawn")
         public int spawnWeight = 10;
 
+        @Config.Name("Skeleton Bat Max Health")
+        public double maxHealth = 10.0D;
+
+        @Config.Name("Skeleton Bat Follow Range")
+        public double followRange = 32.0D;
+
+        @Config.Name("Skeleton Bat Attack Damage")
+        public double attackDamage = 1.0D;
+
         @Config.Name("Skeleton Bat Jockey Head")
         @Config.Comment("Head armor for jockeys")
         public String jockeyHead = "minecraft:leather_helmet";
@@ -44,24 +53,24 @@ public class ConfigHandler
         @Config.Comment("Feet armor for jockeys")
         public String jockeyFeet = "";
 
-        @Config.Name("Skeleton Bat Jockey Main Item")
+        @Config.Name("Skeleton Bat Jockey Mainhand Item")
         @Config.Comment("Main item for jockeys")
-        public String jockeyItemMain = "minecraft:bow";
+        public String jockeyItemMainhand = "minecraft:bow";
 
-        @Config.Name("Skeleton Bat Jockey Off Item")
+        @Config.Name("Skeleton Bat Jockey Offhand Item")
         @Config.Comment("Offhand item for jockeys")
-        public String jockeyItemOff = "minecraft:bone";
+        public String jockeyItemOffhand = "minecraft:bone";
     }
 
-    @Mod.EventBusSubscriber(modid = Jockeys.MODID)
+    @Mod.EventBusSubscriber(modid = Jockeys.MOD_ID)
     public static class EventHandler
     {
         @SubscribeEvent
         public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
         {
-            if (event.getModID().equals(Jockeys.MODID))
+            if (event.getModID().equals(Jockeys.MOD_ID))
             {
-                ConfigManager.sync(Jockeys.MODID, Config.Type.INSTANCE);
+                ConfigManager.sync(Jockeys.MOD_ID, Config.Type.INSTANCE);
             }
         }
     }

@@ -1,5 +1,6 @@
 package mod.acgaming.jockeys.config;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -12,6 +13,6 @@ public class RegistryHelper
         {
             return ForgeRegistries.ITEMS.getValue(new ResourceLocation(name));
         }
-        return null;
+        return Items.AIR;
     }
 }

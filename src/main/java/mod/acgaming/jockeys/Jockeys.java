@@ -13,11 +13,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mod.acgaming.jockeys.client.ClientHandler;
 
-@Mod(modid = Jockeys.MODID, version = Jockeys.VERSION, acceptedMinecraftVersions = "[1.12.2]")
+@Mod(modid = Jockeys.MOD_ID, version = Jockeys.VERSION, acceptedMinecraftVersions = "[1.12.2]")
 public class Jockeys
 {
-    public static final String MODID = "jockeys";
-    public static final String VERSION = "1.12.2-1.0.0";
+    public static final String MOD_ID = "jockeys";
+    public static final String VERSION = "1.0.0";
 
     @Instance
     public static Jockeys instance;

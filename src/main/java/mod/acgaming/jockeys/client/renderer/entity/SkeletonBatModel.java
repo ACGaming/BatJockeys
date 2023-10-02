@@ -26,10 +26,10 @@ public class SkeletonBatModel extends ModelBase
         ModelRenderer modelrenderer = new ModelRenderer(this, 24, 0);
         modelrenderer.addBox(-4.0F, -6.0F, -2.0F, 3, 4, 1);
         this.batHead.addChild(modelrenderer);
-        ModelRenderer modelrenderer1 = new ModelRenderer(this, 24, 0);
-        modelrenderer1.mirror = true;
-        modelrenderer1.addBox(1.0F, -6.0F, -2.0F, 3, 4, 1);
-        this.batHead.addChild(modelrenderer1);
+        ModelRenderer modelRenderer = new ModelRenderer(this, 24, 0);
+        modelRenderer.mirror = true;
+        modelRenderer.addBox(1.0F, -6.0F, -2.0F, 3, 4, 1);
+        this.batHead.addChild(modelRenderer);
         this.batBody = new ModelRenderer(this, 0, 16);
         this.batBody.addBox(-3.0F, 4.0F, -3.0F, 6, 12, 6);
         this.batBody.setTextureOffset(0, 34).addBox(-5.0F, 16.0F, 0.0F, 10, 6, 1);

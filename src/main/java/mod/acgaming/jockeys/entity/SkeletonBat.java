@@ -31,6 +31,7 @@ import mod.acgaming.jockeys.config.RegistryHelper;
 public class SkeletonBat extends EntityMob
 {
     public static final DataParameter<Byte> SKELETON_BAT_FLAGS = EntityDataManager.createKey(SkeletonBat.class, DataSerializers.BYTE);
+    public EntityLiving rider;
 
     public SkeletonBat(World worldIn)
     {
@@ -51,7 +52,7 @@ public class SkeletonBat extends EntityMob
             {
                 this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_BAT_LOOP, SoundCategory.HOSTILE, 0.4F + this.world.rand.nextFloat() * 0.05F, 0.95F + this.world.rand.nextFloat() * 0.05F, false);
             }
-            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 1.0F, this.posZ, 0.0D, 0.0D, 0.0D);
+            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 1.5F, this.posZ, 0.0D, 0.0D, 0.0D);
         }
 
         this.doBlockCollisions();
@@ -63,22 +64,13 @@ public class SkeletonBat extends EntityMob
             {
                 if (!entity.isPassenger(this))
                 {
-                    if (!this.world.isRemote && !entity.isRiding() && entity instanceof EntityMob)
-                    {
-                        entity.startRiding(this);
-                    }
-                    else
-                    {
-                        this.applyEntityCollision(entity);
-                    }
+                    if (!this.world.isRemote && !entity.isRiding() && entity instanceof EntityMob) entity.startRiding(this);
+                    else this.applyEntityCollision(entity);
                 }
             }
         }
 
-        if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL)
-        {
-            this.setDead();
-        }
+        if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) this.setDead();
     }
 
     @Override
@@ -103,9 +95,9 @@ public class SkeletonBat extends EntityMob
     public void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.maxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.followRange);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.attackDamage);
     }
 
     @Override
@@ -155,9 +147,9 @@ public class SkeletonBat extends EntityMob
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(4, new AIChargeAttack());
         this.tasks.addTask(8, new AIMoveRandom());
-        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 4.0F, 1.0F));
-        this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
+        this.tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F, 1.0F));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, SkeletonBat.class));
+        this.targetTasks.addTask(2, new AICopyOwnerTarget(this));
         this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
     }
 
@@ -195,23 +187,19 @@ public class SkeletonBat extends EntityMob
         livingdata = super.onInitialSpawn(difficulty, livingdata);
 
         EntitySkeleton skeleton = new EntitySkeleton(this.world);
-        skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+        skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         skeleton.onInitialSpawn(difficulty, null);
-        this.world.spawnEntity(skeleton);
-        if (Jockeys.isSpookySeason())
-        {
-            skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
-        }
-        else
-        {
-            skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyHead)));
-        }
+        skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.followRange);
+        if (Jockeys.isSpookySeason()) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
+        else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyHead)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyChest)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyLegs)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyFeet)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemMain)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemOff)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemMainhand)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemOffhand)));
+        this.world.spawnEntity(skeleton);
         skeleton.startRiding(this);
+        this.rider = skeleton;
 
         return livingdata;
     }
@@ -255,7 +243,7 @@ public class SkeletonBat extends EntityMob
         {
             if (SkeletonBat.this.getAttackTarget() != null && !SkeletonBat.this.getMoveHelper().isUpdating() && SkeletonBat.this.rand.nextInt(7) == 0)
             {
-                return SkeletonBat.this.getDistanceSq(SkeletonBat.this.getAttackTarget()) > 4.0D;
+                return SkeletonBat.this.getDistanceSq(SkeletonBat.this.getAttackTarget()) > 8.0D;
             }
             else
             {
@@ -274,9 +262,9 @@ public class SkeletonBat extends EntityMob
         {
             EntityLivingBase entitylivingbase = SkeletonBat.this.getAttackTarget();
             Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-            SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+            SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 3.0D);
             SkeletonBat.this.setCharging(true);
-            SkeletonBat.this.playSound(SoundEvents.ENTITY_BAT_TAKEOFF, 1.0F, 1.0F);
+            SkeletonBat.this.playSound(SoundEvents.ENTITY_BAT_TAKEOFF, 1.0F, SkeletonBat.this.getSoundPitch());
         }
 
         @Override
@@ -297,12 +285,12 @@ public class SkeletonBat extends EntityMob
             }
             else
             {
-                double d0 = SkeletonBat.this.getDistanceSq(entitylivingbase);
+                double distanceSq = SkeletonBat.this.getDistanceSq(entitylivingbase);
 
-                if (d0 < 9.0D)
+                if (distanceSq < SkeletonBat.this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue())
                 {
                     Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-                    SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+                    SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 2.0D);
                 }
             }
         }
@@ -390,6 +378,26 @@ public class SkeletonBat extends EntityMob
                     break;
                 }
             }
+        }
+    }
+
+    class AICopyOwnerTarget extends EntityAITarget
+    {
+        public AICopyOwnerTarget(EntityCreature creature)
+        {
+            super(creature, false);
+        }
+
+        public boolean shouldExecute()
+        {
+            return SkeletonBat.this.rider != null && SkeletonBat.this.rider.getAttackTarget() != null && this.isSuitableTarget(SkeletonBat.this.rider.getAttackTarget(), false);
+        }
+
+        @Override
+        public void startExecuting()
+        {
+            SkeletonBat.this.setAttackTarget(SkeletonBat.this.rider.getAttackTarget());
+            super.startExecuting();
         }
     }
 }
