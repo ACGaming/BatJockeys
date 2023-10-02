@@ -6,13 +6,9 @@
     "version": "${version}",
     "mcversion": "${mcversion}",
     "url": "https://github.com/ACGaming/Jockeys/tree/1.12.2",
-    "updateUrl": "",
     "authorList": [
-      "ACGaming"
-    ],
-    "credits": "",
-    "logoFile": "",
-    "screenshots": [],
-    "dependencies": []
+      "ACGaming",
+      "Kanjobo"
+    ]
   }
 ]

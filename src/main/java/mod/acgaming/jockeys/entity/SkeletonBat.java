@@ -70,6 +70,18 @@ public class SkeletonBat extends EntityMob
             }
         }
 
+        if (Jockeys.isSpookySeason() && this.rand.nextInt(1000) == 0 && !RegistryHelper.dropList.isEmpty())
+        {
+            if (this.world.isRemote)
+            {
+                this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_BURP, this.getSoundCategory(), 0.5F + this.rand.nextFloat() * 0.05F, 0.95F + this.rand.nextFloat() * 0.05F, false);
+            }
+            else
+            {
+                this.dropItemWithOffset(RegistryHelper.getRandomHalloweenDrop(this.world), 1, 0.5F);
+            }
+        }
+
         if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) this.setDead();
     }
 
