@@ -1,6 +1,7 @@
 package mod.acgaming.jockeys;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -11,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class JockeysTab extends CreativeTabs
 {
-    public static ArrayList<ItemStack> eggs = new ArrayList<>();
+    public static final List<ItemStack> EGGS = new ArrayList<>();
 
     public JockeysTab()
     {
@@ -30,6 +31,6 @@ public class JockeysTab extends CreativeTabs
     public void displayAllRelevantItems(NonNullList<ItemStack> list)
     {
         super.displayAllRelevantItems(list);
-        list.addAll(eggs);
+        list.addAll(EGGS);
     }
 }

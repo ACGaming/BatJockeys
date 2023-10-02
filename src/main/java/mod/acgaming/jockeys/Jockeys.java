@@ -1,7 +1,6 @@
 package mod.acgaming.jockeys;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -23,12 +22,12 @@ public class Jockeys
     @Instance
     public static Jockeys instance;
 
-    public static boolean isHalloween()
+    public static boolean isSpookySeason()
     {
         LocalDate localdate = LocalDate.now();
-        int day = localdate.get(ChronoField.DAY_OF_MONTH);
-        int month = localdate.get(ChronoField.MONTH_OF_YEAR);
-        return month == 10 && day >= 1 || month == 11 && day <= 1;
+        int month = localdate.getMonth().getValue();
+        int day = localdate.getDayOfMonth();
+        return month == 10 || month == 11 && day == 1;
     }
 
     @SideOnly(Side.CLIENT)

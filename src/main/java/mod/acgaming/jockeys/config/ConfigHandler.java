@@ -12,52 +12,52 @@ import mod.acgaming.jockeys.Jockeys;
 public class ConfigHandler
 {
     @Config.Comment("Skeleton Bat Settings")
-    public static SkeletonBatSettings skeleton_bat_settings = new SkeletonBatSettings();
+    public static final SkeletonBatSettings SKELETON_BAT_SETTINGS = new SkeletonBatSettings();
 
     public static class SkeletonBatSettings
     {
         @Config.Name("Skeleton Bat Min Group Size")
         @Config.Comment("Minimum amount per spawn")
-        public int min_group_size = 1;
+        public int minGroupSize = 1;
 
         @Config.Name("Skeleton Bat Max Group Size")
         @Config.Comment("Maximum amount per spawn")
-        public int max_group_size = 2;
+        public int maxGroupSize = 2;
 
         @Config.Name("Skeleton Bat Spawn Weight")
         @Config.Comment("Chance to spawn")
-        public int spawn_weight = 10;
+        public int spawnWeight = 10;
 
         @Config.Name("Skeleton Bat Jockey Head")
         @Config.Comment("Head armor for jockeys")
-        public String jockey_head = "minecraft:leather_helmet";
+        public String jockeyHead = "minecraft:leather_helmet";
 
         @Config.Name("Skeleton Bat Jockey Chest")
         @Config.Comment("Chest armor for jockeys")
-        public String jockey_chest = "";
+        public String jockeyChest = "";
 
         @Config.Name("Skeleton Bat Jockey Legs")
         @Config.Comment("Legs armor for jockeys")
-        public String jockey_legs = "";
+        public String jockeyLegs = "";
 
         @Config.Name("Skeleton Bat Jockey Feet")
         @Config.Comment("Feet armor for jockeys")
-        public String jockey_feet = "";
+        public String jockeyFeet = "";
 
         @Config.Name("Skeleton Bat Jockey Main Item")
         @Config.Comment("Main item for jockeys")
-        public String jockey_item_main = "minecraft:bow";
+        public String jockeyItemMain = "minecraft:bow";
 
         @Config.Name("Skeleton Bat Jockey Off Item")
         @Config.Comment("Offhand item for jockeys")
-        public String jockey_item_off = "minecraft:bone";
+        public String jockeyItemOff = "minecraft:bone";
     }
 
     @Mod.EventBusSubscriber(modid = Jockeys.MODID)
     public static class EventHandler
     {
         @SubscribeEvent
-        public static void onConfigChanged(final ConfigChangedEvent.OnConfigChangedEvent event)
+        public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
         {
             if (event.getModID().equals(Jockeys.MODID))
             {

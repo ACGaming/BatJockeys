@@ -25,7 +25,7 @@ import mod.acgaming.jockeys.entity.SkeletonBat;
 @Mod.EventBusSubscriber(modid = Jockeys.MODID)
 public class JockeysRegistry
 {
-    public static int id;
+    private static int id;
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event)
@@ -44,14 +44,14 @@ public class JockeysRegistry
         registerEntityWithSpawnEgg(SkeletonBat.class, "skeleton_bat", 4996656, 986895);
 
         // SPAWNING
-        if (ConfigHandler.skeleton_bat_settings.spawn_weight > 0) EntityRegistry.addSpawn(SkeletonBat.class, ConfigHandler.skeleton_bat_settings.spawn_weight, ConfigHandler.skeleton_bat_settings.min_group_size, ConfigHandler.skeleton_bat_settings.max_group_size, EnumCreatureType.MONSTER, regularSpawning.toArray(new Biome[0]));
+        if (ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight, ConfigHandler.SKELETON_BAT_SETTINGS.minGroupSize, ConfigHandler.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, regularSpawning.toArray(new Biome[0]));
     }
 
     public static void registerEntityWithSpawnEgg(Class clazz, String entityName, int primary, int secondary)
     {
         ResourceLocation registryName = new ResourceLocation(Jockeys.MODID, entityName);
         EntityRegistry.registerModEntity(registryName, clazz, entityName, id++, Jockeys.instance, 64, 1, true, primary, secondary);
-        JockeysTab.eggs.add(getSpawnEgg(entityName));
+        JockeysTab.EGGS.add(getSpawnEgg(entityName));
     }
 
     public static ItemStack getSpawnEgg(String entityName)

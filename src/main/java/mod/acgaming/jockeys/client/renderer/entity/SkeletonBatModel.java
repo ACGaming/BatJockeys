@@ -51,6 +51,7 @@ public class SkeletonBatModel extends ModelBase
         this.batLeftWing.addChild(this.batOuterLeftWing);
     }
 
+    @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
@@ -58,6 +59,7 @@ public class SkeletonBatModel extends ModelBase
         this.batBody.render(scale);
     }
 
+    @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
     {
         this.batHead.rotateAngleX = headPitch * 0.017453292F;
