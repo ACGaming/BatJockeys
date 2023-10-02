@@ -32,7 +32,7 @@ public class JockeysRegistry
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event)
     {
         // REGISTRATION
-        registerEntity(SkeletonBat.class, "skeleton_bat", 4996656, 986895, EntityLiving.SpawnPlacementType.ON_GROUND);
+        registerEntity(SkeletonBat.class, "skeleton_bat", 4996656, 986895, EntityLiving.SpawnPlacementType.IN_AIR);
         registerEntity(WitherSkeletonGhast.class, "wither_skeleton_ghast", 16382457, 12369084, EntityLiving.SpawnPlacementType.ON_GROUND);
         registerEntity(CandyBomb.class, "candy_bomb");
 

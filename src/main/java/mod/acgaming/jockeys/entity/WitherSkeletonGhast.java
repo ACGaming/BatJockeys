@@ -57,7 +57,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     {
         this.tasks.addTask(5, new WitherSkeletonGhast.AIRandomFly(this));
         this.tasks.addTask(7, new WitherSkeletonGhast.AILookAround(this));
-        if (Jockeys.isSpookySeason()) this.tasks.addTask(7, new AICandyAttack(this));
+        if (Jockeys.isSpookySeason(this.world)) this.tasks.addTask(7, new AICandyAttack(this));
         this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
     }
 
@@ -107,12 +107,6 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     }
 
     @Override
-    public int getMaxSpawnedInChunk()
-    {
-        return 1;
-    }
-
-    @Override
     @Nullable
     public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingData)
     {
@@ -122,7 +116,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
         skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         skeleton.onInitialSpawn(difficulty, null);
         skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.followRange);
-        if (Jockeys.isSpookySeason()) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
+        if (Jockeys.isSpookySeason(this.world)) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
         else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyHead)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyChest)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.jockeyLegs)));

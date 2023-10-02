@@ -97,7 +97,7 @@ public class ConfigHandler
 
         @Config.Name("Wither Skeleton Ghast Max Group Size")
         @Config.Comment("Maximum amount per spawn")
-        public int maxGroupSize = 2;
+        public int maxGroupSize = 1;
 
         @Config.Name("Wither Skeleton Ghast Spawn Weight")
         @Config.Comment("Chance to spawn")

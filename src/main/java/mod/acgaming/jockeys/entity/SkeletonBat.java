@@ -70,7 +70,7 @@ public class SkeletonBat extends EntityMob
             }
         }
 
-        if (Jockeys.isSpookySeason() && this.rand.nextInt(1000) == 0 && !RegistryHelper.dropList.isEmpty())
+        if (Jockeys.isSpookySeason(this.world) && this.rand.nextInt(1000) == 0 && !RegistryHelper.dropList.isEmpty())
         {
             if (this.world.isRemote)
             {
@@ -100,7 +100,27 @@ public class SkeletonBat extends EntityMob
     @Override
     public boolean getCanSpawnHere()
     {
-        return super.getCanSpawnHere() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+        if (this.world.getDifficulty() != EnumDifficulty.PEACEFUL) return false;
+
+        BlockPos blockpos = new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ);
+
+        if (blockpos.getY() >= this.world.getSeaLevel()) return false;
+        else
+        {
+            int i = this.world.getLightFromNeighbors(blockpos);
+            int j = 4;
+
+            if (Jockeys.isSpookySeason(this.world))
+            {
+                j = 7;
+            }
+            else if (this.rand.nextBoolean())
+            {
+                return false;
+            }
+
+            return i <= this.rand.nextInt(j) && super.getCanSpawnHere();
+        }
     }
 
     @Override
@@ -202,7 +222,7 @@ public class SkeletonBat extends EntityMob
         skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         skeleton.onInitialSpawn(difficulty, null);
         skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.followRange);
-        if (Jockeys.isSpookySeason()) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
+        if (Jockeys.isSpookySeason(this.world)) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
         else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyHead)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyChest)));
         skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyLegs)));

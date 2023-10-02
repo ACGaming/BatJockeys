@@ -1,7 +1,8 @@
 package mod.acgaming.jockeys;
 
-import java.time.LocalDate;
+import java.util.Calendar;
 
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -24,13 +25,11 @@ public class Jockeys
     @Instance
     public static Jockeys instance;
 
-    public static boolean isSpookySeason()
+    public static boolean isSpookySeason(World world)
     {
         if (ConfigHandler.GENERAL_SETTINGS.alwaysSpookySeason) return true;
-        LocalDate localdate = LocalDate.now();
-        int month = localdate.getMonth().getValue();
-        int day = localdate.getDayOfMonth();
-        return month == 10 || month == 11 && day == 1;
+        Calendar calendar = world.getCurrentDate();
+        return calendar.get(Calendar.MONTH) + 1 == 10 && calendar.get(Calendar.DATE) >= 20 || calendar.get(Calendar.MONTH) + 1 == 11 && calendar.get(Calendar.DATE) <= 3;
     }
 
     @SideOnly(Side.CLIENT)
