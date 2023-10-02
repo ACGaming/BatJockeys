@@ -10,6 +10,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import mod.acgaming.jockeys.client.renderer.entity.model.SkeletonBatModel;
 import mod.acgaming.jockeys.entity.SkeletonBat;
 
 @SideOnly(Side.CLIENT)

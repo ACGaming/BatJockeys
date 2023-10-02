@@ -1,4 +1,4 @@
-package mod.acgaming.jockeys.client.renderer.entity;
+package mod.acgaming.jockeys.client.renderer.entity.model;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
