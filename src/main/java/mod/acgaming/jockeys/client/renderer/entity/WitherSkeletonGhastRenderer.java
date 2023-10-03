@@ -1,5 +1,6 @@
 package mod.acgaming.jockeys.client.renderer.entity;
 
+import mod.acgaming.jockeys.Jockeys;
 import net.minecraft.client.model.ModelGhast;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,7 +18,9 @@ public class WitherSkeletonGhastRenderer extends RenderLiving<WitherSkeletonGhas
 {
     public static final WitherSkeletonGhastRenderer.Factory FACTORY = new WitherSkeletonGhastRenderer.Factory();
     public static final ResourceLocation GHAST_TEXTURES = new ResourceLocation("textures/entity/ghast/ghast.png");
+    public static final ResourceLocation GHAST_TEXTURES_SPOOKY = new ResourceLocation(Jockeys.MOD_ID,"textures/entity/pumpkin_ghast.png");
     public static final ResourceLocation GHAST_SHOOTING_TEXTURES = new ResourceLocation("textures/entity/ghast/ghast_shooting.png");
+    public static final ResourceLocation GHAST_SHOOTING_TEXTURES_SPOOKY = new ResourceLocation(Jockeys.MOD_ID,"textures/entity/pumpkin_ghast_shooting.png");
 
     public WitherSkeletonGhastRenderer(RenderManager renderManagerIn)
     {
@@ -26,6 +29,7 @@ public class WitherSkeletonGhastRenderer extends RenderLiving<WitherSkeletonGhas
 
     public ResourceLocation getEntityTexture(WitherSkeletonGhast entity)
     {
+        if (Jockeys.isSpookySeason(entity.world)) return entity.isAttacking() ? GHAST_SHOOTING_TEXTURES_SPOOKY : GHAST_TEXTURES_SPOOKY;
         return entity.isAttacking() ? GHAST_SHOOTING_TEXTURES : GHAST_TEXTURES;
     }
 
