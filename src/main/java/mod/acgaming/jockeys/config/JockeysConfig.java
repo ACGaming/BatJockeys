@@ -63,7 +63,7 @@ public class JockeysConfig
         public double maxHealth = 10.0D;
 
         @Config.Name("Skeleton Bat Follow Range")
-        public double followRange = 32.0D;
+        public double followRange = 64.0D;
 
         @Config.Name("Skeleton Bat Attack Damage")
         public double attackDamage = 1.0D;

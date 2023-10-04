@@ -5,8 +5,10 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.*;
+import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -54,21 +56,6 @@ public class SkeletonBat extends EntityMob
             this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX, this.posY + 1.5F, this.posZ, 0.0D, 0.0D, 0.0D);
         }
 
-        this.doBlockCollisions();
-        List<Entity> list = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.2D, -0.01D, 0.2D), EntitySelectors.getTeamCollisionPredicate(this));
-
-        if (!list.isEmpty())
-        {
-            for (Entity entity : list)
-            {
-                if (!entity.isPassenger(this))
-                {
-                    if (!this.world.isRemote && !entity.isRiding() && entity instanceof EntityMob) entity.startRiding(this);
-                    else this.applyEntityCollision(entity);
-                }
-            }
-        }
-
         if (Jockeys.isSpookySeason(this.world) && this.rand.nextInt(1000) == 0 && !JockeysHelper.dropList.isEmpty())
         {
             if (this.world.isRemote)
@@ -79,6 +66,11 @@ public class SkeletonBat extends EntityMob
             {
                 this.dropItemWithOffset(JockeysHelper.getRandomHalloweenDrop(this.world), 1, 0.5F);
             }
+        }
+
+        if (this.isBeingRidden() && this.world.getBlockState(this.getPosition().up(3)).causesSuffocation() && !this.world.getBlockState(this.getPosition().down()).causesSuffocation())
+        {
+            this.setPosition(this.posX, this.posY - 0.05D, this.posZ);
         }
     }
 
@@ -195,7 +187,9 @@ public class SkeletonBat extends EntityMob
     {
         livingData = super.onInitialSpawn(difficulty, livingData);
 
-        EntitySkeleton skeleton = new EntitySkeleton(this.world);
+        AbstractSkeleton skeleton;
+        if (this.world.rand.nextInt(10) == 0) skeleton = new EntityWitherSkeleton(this.world);
+        else skeleton = new EntitySkeleton(this.world);
         skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         skeleton.onInitialSpawn(difficulty, null);
         skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(JockeysConfig.SKELETON_BAT_SETTINGS.followRange);
@@ -250,14 +244,26 @@ public class SkeletonBat extends EntityMob
 
         public boolean shouldExecute()
         {
+            if (!SkeletonBat.this.isBeingRidden())
+            {
+                List<AbstractSkeleton> skeletonList = SkeletonBat.this.world.getEntitiesWithinAABB(AbstractSkeleton.class, SkeletonBat.this.getEntityBoundingBox().grow(16.0D));
+                if (!skeletonList.isEmpty())
+                {
+                    for (AbstractSkeleton skeleton : skeletonList)
+                    {
+                        if (!skeleton.isInvisible() && !skeleton.isRiding())
+                        {
+                            SkeletonBat.this.setAttackTarget(skeleton);
+                            return true;
+                        }
+                    }
+                }
+            }
             if (SkeletonBat.this.getAttackTarget() != null && !SkeletonBat.this.getMoveHelper().isUpdating() && SkeletonBat.this.rand.nextInt(7) == 0)
             {
-                return SkeletonBat.this.getDistanceSq(SkeletonBat.this.getAttackTarget()) > 8.0D;
+                return SkeletonBat.this.getDistanceSq(SkeletonBat.this.getAttackTarget()) > 6.0D;
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
         @Override
@@ -269,9 +275,9 @@ public class SkeletonBat extends EntityMob
         @Override
         public void startExecuting()
         {
-            EntityLivingBase entitylivingbase = SkeletonBat.this.getAttackTarget();
-            Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-            SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 3.0D);
+            EntityLivingBase attackTarget = SkeletonBat.this.getAttackTarget();
+            Vec3d vec3d = attackTarget.getPositionEyes(1.0F);
+            SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, SkeletonBat.this.getAttackTarget() instanceof AbstractSkeleton ? 1.0D : 3.0D);
             SkeletonBat.this.setCharging(true);
             SkeletonBat.this.playSound(SoundEvents.ENTITY_BAT_TAKEOFF, 1.0F, SkeletonBat.this.getSoundPitch());
         }
@@ -285,21 +291,27 @@ public class SkeletonBat extends EntityMob
         @Override
         public void updateTask()
         {
-            EntityLivingBase entitylivingbase = SkeletonBat.this.getAttackTarget();
-
-            if (SkeletonBat.this.getEntityBoundingBox().intersects(entitylivingbase.getEntityBoundingBox()))
+            EntityLivingBase attackTarget = SkeletonBat.this.getAttackTarget();
+            if (SkeletonBat.this.getEntityBoundingBox().intersects(attackTarget.getEntityBoundingBox()))
             {
-                SkeletonBat.this.attackEntityAsMob(entitylivingbase);
+                if (attackTarget instanceof AbstractSkeleton)
+                {
+                    attackTarget.startRiding(SkeletonBat.this);
+                    SkeletonBat.this.playSound(SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0F, 1.0F);
+                }
+                else
+                {
+                    SkeletonBat.this.attackEntityAsMob(attackTarget);
+                }
                 SkeletonBat.this.setCharging(false);
             }
             else
             {
-                double distanceSq = SkeletonBat.this.getDistanceSq(entitylivingbase);
-
+                double distanceSq = SkeletonBat.this.getDistanceSq(attackTarget);
                 if (distanceSq < SkeletonBat.this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue())
                 {
-                    Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-                    SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 2.0D);
+                    Vec3d vec3d = attackTarget.getPositionEyes(1.0F);
+                    SkeletonBat.this.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, SkeletonBat.this.getAttackTarget() instanceof AbstractSkeleton ? 1.0D : 3.0D);
                 }
             }
         }
@@ -317,13 +329,13 @@ public class SkeletonBat extends EntityMob
         {
             if (this.action == EntityMoveHelper.Action.MOVE_TO)
             {
-                double d0 = this.posX - SkeletonBat.this.posX;
-                double d1 = this.posY - SkeletonBat.this.posY;
-                double d2 = this.posZ - SkeletonBat.this.posZ;
-                double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-                d3 = MathHelper.sqrt(d3);
+                double distX = this.posX - SkeletonBat.this.posX;
+                double distY = this.posY - SkeletonBat.this.posY;
+                double distZ = this.posZ - SkeletonBat.this.posZ;
+                double distanceSq = distX * distX + distY * distY + distZ * distZ;
+                distanceSq = MathHelper.sqrt(distanceSq);
 
-                if (d3 < SkeletonBat.this.getEntityBoundingBox().getAverageEdgeLength())
+                if (distanceSq < SkeletonBat.this.getEntityBoundingBox().getAverageEdgeLength())
                 {
                     this.action = EntityMoveHelper.Action.WAIT;
                     SkeletonBat.this.motionX *= 0.5D;
@@ -332,9 +344,9 @@ public class SkeletonBat extends EntityMob
                 }
                 else
                 {
-                    SkeletonBat.this.motionX += d0 / d3 * 0.05D * this.speed;
-                    SkeletonBat.this.motionY += d1 / d3 * 0.05D * this.speed;
-                    SkeletonBat.this.motionZ += d2 / d3 * 0.05D * this.speed;
+                    SkeletonBat.this.motionX += distX / distanceSq * 0.05D * this.speed;
+                    SkeletonBat.this.motionY += distY / distanceSq * 0.05D * this.speed;
+                    SkeletonBat.this.motionZ += distZ / distanceSq * 0.05D * this.speed;
 
                     if (SkeletonBat.this.getAttackTarget() == null)
                     {

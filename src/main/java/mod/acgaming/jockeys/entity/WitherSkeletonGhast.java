@@ -55,8 +55,8 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     @Override
     public void initEntityAI()
     {
-        this.tasks.addTask(5, new WitherSkeletonGhast.AIRandomFly(this));
-        this.tasks.addTask(7, new WitherSkeletonGhast.AILookAround(this));
+        this.tasks.addTask(5, new AIRandomFly(this));
+        this.tasks.addTask(7, new AILookAround(this));
         if (Jockeys.isSpookySeason(this.world)) this.tasks.addTask(7, new AICandyAttack(this));
         this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
     }
@@ -129,6 +129,12 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
         return livingData;
     }
 
+    @Override
+    public boolean canPassengerSteer()
+    {
+        return false;
+    }
+
     @SideOnly(Side.CLIENT)
     public boolean isAttacking()
     {
@@ -179,7 +185,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     @Override
     public double getMountedYOffset()
     {
-        return super.getMountedYOffset() + 0.9D;
+        return super.getMountedYOffset() + 0.7D;
     }
 
     @Override
