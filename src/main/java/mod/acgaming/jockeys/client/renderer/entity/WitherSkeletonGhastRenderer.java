@@ -35,7 +35,7 @@ public class WitherSkeletonGhastRenderer extends RenderLiving<WitherSkeletonGhas
 
     public void preRenderCallback(WitherSkeletonGhast entitylivingbaseIn, float partialTickTime)
     {
-        GlStateManager.scale(4.5F, 4.5F, 4.5F);
+        GlStateManager.scale(3.0F, 3.0F, 3.0F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 

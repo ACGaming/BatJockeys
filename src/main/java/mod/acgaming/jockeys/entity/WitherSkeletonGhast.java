@@ -46,7 +46,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     public WitherSkeletonGhast(World worldIn)
     {
         super(worldIn);
-        this.setSize(4.0F, 4.0F);
+        this.setSize(2.5F, 2.5F);
         this.isImmuneToFire = true;
         this.experienceValue = 5;
         this.moveHelper = new WitherSkeletonGhast.GhastMoveHelper(this);
