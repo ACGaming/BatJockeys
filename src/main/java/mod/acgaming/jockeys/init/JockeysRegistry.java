@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 import mod.acgaming.jockeys.Jockeys;
-import mod.acgaming.jockeys.config.ConfigHandler;
+import mod.acgaming.jockeys.config.JockeysConfig;
 import mod.acgaming.jockeys.entity.CandyBomb;
 import mod.acgaming.jockeys.entity.SkeletonBat;
 import mod.acgaming.jockeys.entity.WitherSkeletonGhast;
@@ -38,8 +38,8 @@ public class JockeysRegistry
 
         // SPAWNING
         compileSpawningBiomes();
-        if (ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, ConfigHandler.SKELETON_BAT_SETTINGS.spawnWeight, ConfigHandler.SKELETON_BAT_SETTINGS.minGroupSize, ConfigHandler.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, REGULAR_SPAWNING.toArray(new Biome[0]));
-        if (ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, ConfigHandler.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, NETHER_SPAWNING.toArray(new Biome[0]));
+        if (JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight, JockeysConfig.SKELETON_BAT_SETTINGS.minGroupSize, JockeysConfig.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, REGULAR_SPAWNING.toArray(new Biome[0]));
+        if (JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, NETHER_SPAWNING.toArray(new Biome[0]));
     }
 
     public static void compileSpawningBiomes()

@@ -13,8 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import mod.acgaming.jockeys.client.ClientHandler;
-import mod.acgaming.jockeys.config.ConfigHandler;
-import mod.acgaming.jockeys.config.RegistryHelper;
+import mod.acgaming.jockeys.config.JockeysConfig;
+import mod.acgaming.jockeys.util.JockeysHelper;
 
 @Mod(modid = Jockeys.MOD_ID, version = Jockeys.VERSION, acceptedMinecraftVersions = "[1.12.2]")
 public class Jockeys
@@ -27,7 +27,7 @@ public class Jockeys
 
     public static boolean isSpookySeason(World world)
     {
-        if (ConfigHandler.GENERAL_SETTINGS.alwaysSpookySeason) return true;
+        if (JockeysConfig.GENERAL_SETTINGS.alwaysSpookySeason) return true;
         Calendar calendar = world.getCurrentDate();
         return calendar.get(Calendar.MONTH) + 1 == 10 && calendar.get(Calendar.DATE) >= 20 || calendar.get(Calendar.MONTH) + 1 == 11 && calendar.get(Calendar.DATE) <= 3;
     }
@@ -47,7 +47,7 @@ public class Jockeys
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-        RegistryHelper.initHalloweenDropList();
+        JockeysHelper.initHalloweenDropList();
     }
 
     @EventHandler

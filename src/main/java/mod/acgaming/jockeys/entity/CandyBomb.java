@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import mod.acgaming.jockeys.config.RegistryHelper;
+import mod.acgaming.jockeys.util.JockeysHelper;
 
 public class CandyBomb extends EntityFireball
 {
@@ -39,7 +39,7 @@ public class CandyBomb extends EntityFireball
     public CandyBomb(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
     {
         super(worldIn, shooter, accelX, accelY, accelZ);
-        this.ammo = RegistryHelper.getRandomHalloweenDrop(worldIn);
+        this.ammo = JockeysHelper.getRandomHalloweenDrop(worldIn);
     }
 
     @SideOnly(Side.CLIENT)

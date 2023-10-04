@@ -1,4 +1,4 @@
-package mod.acgaming.jockeys.config;
+package mod.acgaming.jockeys.util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
-public class RegistryHelper
+import mod.acgaming.jockeys.config.JockeysConfig;
+
+public class JockeysHelper
 {
     public static List<Item> dropList = new ArrayList<>();
 
@@ -24,7 +26,7 @@ public class RegistryHelper
 
     public static void initHalloweenDropList()
     {
-        for (String name : ConfigHandler.GENERAL_SETTINGS.halloweenDrops)
+        for (String name : JockeysConfig.GENERAL_SETTINGS.halloweenDrops)
         {
             Item item = getItemValueFromName(name);
             if (item != Items.AIR) dropList.add(item);

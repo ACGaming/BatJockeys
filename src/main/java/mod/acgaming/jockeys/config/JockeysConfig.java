@@ -7,9 +7,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import mod.acgaming.jockeys.Jockeys;
+import mod.acgaming.jockeys.util.JockeysHelper;
 
 @Config(modid = Jockeys.MOD_ID, name = "Jockeys")
-public class ConfigHandler
+public class JockeysConfig
 {
     @Config.Comment("General Settings")
     public static final GeneralSettings GENERAL_SETTINGS = new GeneralSettings();
@@ -143,7 +144,7 @@ public class ConfigHandler
             if (event.getModID().equals(Jockeys.MOD_ID))
             {
                 ConfigManager.sync(Jockeys.MOD_ID, Config.Type.INSTANCE);
-                RegistryHelper.initHalloweenDropList();
+                JockeysHelper.initHalloweenDropList();
             }
         }
     }

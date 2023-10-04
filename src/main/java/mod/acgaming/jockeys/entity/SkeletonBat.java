@@ -25,8 +25,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
 import mod.acgaming.jockeys.Jockeys;
-import mod.acgaming.jockeys.config.ConfigHandler;
-import mod.acgaming.jockeys.config.RegistryHelper;
+import mod.acgaming.jockeys.config.JockeysConfig;
+import mod.acgaming.jockeys.util.JockeysHelper;
 
 public class SkeletonBat extends EntityMob
 {
@@ -70,7 +70,7 @@ public class SkeletonBat extends EntityMob
             }
         }
 
-        if (Jockeys.isSpookySeason(this.world) && this.rand.nextInt(1000) == 0 && !RegistryHelper.dropList.isEmpty())
+        if (Jockeys.isSpookySeason(this.world) && this.rand.nextInt(1000) == 0 && !JockeysHelper.dropList.isEmpty())
         {
             if (this.world.isRemote)
             {
@@ -78,7 +78,7 @@ public class SkeletonBat extends EntityMob
             }
             else
             {
-                this.dropItemWithOffset(RegistryHelper.getRandomHalloweenDrop(this.world), 1, 0.5F);
+                this.dropItemWithOffset(JockeysHelper.getRandomHalloweenDrop(this.world), 1, 0.5F);
             }
         }
     }
@@ -121,9 +121,9 @@ public class SkeletonBat extends EntityMob
     public void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.maxHealth);
-        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.followRange);
-        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.attackDamage);
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(JockeysConfig.SKELETON_BAT_SETTINGS.maxHealth);
+        this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(JockeysConfig.SKELETON_BAT_SETTINGS.followRange);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(JockeysConfig.SKELETON_BAT_SETTINGS.attackDamage);
     }
 
     @Override
@@ -215,14 +215,14 @@ public class SkeletonBat extends EntityMob
         EntitySkeleton skeleton = new EntitySkeleton(this.world);
         skeleton.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
         skeleton.onInitialSpawn(difficulty, null);
-        skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(ConfigHandler.SKELETON_BAT_SETTINGS.followRange);
+        skeleton.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(JockeysConfig.SKELETON_BAT_SETTINGS.followRange);
         if (Jockeys.isSpookySeason(this.world)) skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Blocks.LIT_PUMPKIN));
-        else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyHead)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyChest)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyLegs)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyFeet)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemMainhand)));
-        skeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(RegistryHelper.getItemValueFromName(ConfigHandler.SKELETON_BAT_SETTINGS.jockeyItemOffhand)));
+        else skeleton.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(JockeysHelper.getItemValueFromName(JockeysConfig.SKELETON_BAT_SETTINGS.jockeyHead)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(JockeysHelper.getItemValueFromName(JockeysConfig.SKELETON_BAT_SETTINGS.jockeyChest)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(JockeysHelper.getItemValueFromName(JockeysConfig.SKELETON_BAT_SETTINGS.jockeyLegs)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(JockeysHelper.getItemValueFromName(JockeysConfig.SKELETON_BAT_SETTINGS.jockeyFeet)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(JockeysHelper.getItemValueFromName(JockeysConfig.SKELETON_BAT_SETTINGS.jockeyItemMainhand)));
+        skeleton.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(JockeysHelper.getItemValueFromName(JockeysConfig.SKELETON_BAT_SETTINGS.jockeyItemOffhand)));
         this.world.spawnEntity(skeleton);
         skeleton.startRiding(this);
         this.rider = skeleton;
