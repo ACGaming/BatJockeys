@@ -20,7 +20,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -98,23 +97,7 @@ public class SkeletonBat extends EntityMob
     @Override
     public boolean getCanSpawnHere()
     {
-        if (this.world.getDifficulty() == EnumDifficulty.PEACEFUL) return false;
-
-        BlockPos blockpos = new BlockPos(this.posX, this.getEntityBoundingBox().minY, this.posZ);
-
-        int i = this.world.getLightFromNeighbors(blockpos);
-        int j = 4;
-
-        if (Jockeys.isSpookySeason(this.world))
-        {
-            j = 7;
-        }
-        else if (this.rand.nextBoolean())
-        {
-            return false;
-        }
-
-        return i <= this.rand.nextInt(j) && super.getCanSpawnHere();
+        return super.getCanSpawnHere() && this.world.canSeeSky(this.getPosition());
     }
 
     @Override

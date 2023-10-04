@@ -44,17 +44,20 @@ public class JockeysConfig
 
     public static class SkeletonBatSettings
     {
+        @Config.RequiresMcRestart
         @Config.Name("Skeleton Bat Min Group Size")
         @Config.Comment("Minimum amount per spawn")
         public int minGroupSize = 1;
 
+        @Config.RequiresMcRestart
         @Config.Name("Skeleton Bat Max Group Size")
         @Config.Comment("Maximum amount per spawn")
         public int maxGroupSize = 2;
 
+        @Config.RequiresMcRestart
         @Config.Name("Skeleton Bat Spawn Weight")
         @Config.Comment("Chance to spawn")
-        public int spawnWeight = 10;
+        public int spawnWeight = 15;
 
         @Config.Name("Skeleton Bat Max Health")
         public double maxHealth = 10.0D;
@@ -92,17 +95,20 @@ public class JockeysConfig
 
     public static class WitherSkeletonGhastSettings
     {
+        @Config.RequiresMcRestart
         @Config.Name("Wither Skeleton Ghast Min Group Size")
         @Config.Comment("Minimum amount per spawn")
         public int minGroupSize = 1;
 
+        @Config.RequiresMcRestart
         @Config.Name("Wither Skeleton Ghast Max Group Size")
         @Config.Comment("Maximum amount per spawn")
         public int maxGroupSize = 1;
 
+        @Config.RequiresMcRestart
         @Config.Name("Wither Skeleton Ghast Spawn Weight")
         @Config.Comment("Chance to spawn")
-        public int spawnWeight = 10;
+        public int spawnWeight = 15;
 
         @Config.Name("Wither Skeleton Ghast Max Health")
         public double maxHealth = 10.0D;
