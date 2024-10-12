@@ -29,17 +29,17 @@ import mod.acgaming.jockeys.util.JockeysHelper;
 
 public class CandyBomb extends EntityFireball
 {
-    public Item ammo;
+    private Item ammo;
 
-    public CandyBomb(World worldIn)
+    public CandyBomb(World world)
     {
-        super(worldIn);
+        super(world);
     }
 
-    public CandyBomb(World worldIn, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
+    public CandyBomb(World world, EntityLivingBase shooter, double accelX, double accelY, double accelZ)
     {
-        super(worldIn, shooter, accelX, accelY, accelZ);
-        this.ammo = JockeysHelper.getRandomHalloweenDrop(worldIn);
+        super(world, shooter, accelX, accelY, accelZ);
+        this.ammo = JockeysHelper.getRandomHalloweenDrop(world);
     }
 
     @SideOnly(Side.CLIENT)

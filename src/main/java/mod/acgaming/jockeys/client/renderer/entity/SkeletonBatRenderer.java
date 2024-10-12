@@ -19,9 +19,9 @@ public class SkeletonBatRenderer extends RenderLiving<SkeletonBat>
     public static final SkeletonBatRenderer.Factory FACTORY = new SkeletonBatRenderer.Factory();
     public static final ResourceLocation BAT_TEXTURES = new ResourceLocation("textures/entity/bat.png");
 
-    public SkeletonBatRenderer(RenderManager renderManagerIn)
+    public SkeletonBatRenderer(RenderManager renderManager)
     {
-        super(renderManagerIn, new SkeletonBatModel(), 0.25F);
+        super(renderManager, new SkeletonBatModel(), 0.25F);
     }
 
     public ResourceLocation getEntityTexture(SkeletonBat entity)
@@ -29,13 +29,13 @@ public class SkeletonBatRenderer extends RenderLiving<SkeletonBat>
         return BAT_TEXTURES;
     }
 
-    public void applyRotations(SkeletonBat entityLiving, float p_77043_2_, float rotationYaw, float partialTicks)
+    public void applyRotations(SkeletonBat entityLiving, float f1, float rotationYaw, float partialTicks)
     {
-        GlStateManager.translate(0.0F, MathHelper.cos(p_77043_2_ * 0.15F) * 0.1F, 0.0F);
-        super.applyRotations(entityLiving, p_77043_2_, rotationYaw, partialTicks);
+        GlStateManager.translate(0.0F, MathHelper.cos(f1 * 0.15F) * 0.1F, 0.0F);
+        super.applyRotations(entityLiving, f1, rotationYaw, partialTicks);
     }
 
-    public void preRenderCallback(SkeletonBat entitylivingbaseIn, float partialTickTime)
+    public void preRenderCallback(SkeletonBat entity, float partialTickTime)
     {
         GlStateManager.scale(1.05F, 1.05F, 1.05F);
     }

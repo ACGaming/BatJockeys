@@ -43,9 +43,9 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
 {
     public static final DataParameter<Boolean> ATTACKING = EntityDataManager.createKey(WitherSkeletonGhast.class, DataSerializers.BOOLEAN);
 
-    public WitherSkeletonGhast(World worldIn)
+    public WitherSkeletonGhast(World world)
     {
-        super(worldIn);
+        super(world);
         this.setSize(2.5F, 2.5F);
         this.isImmuneToFire = true;
         this.experienceValue = 5;
@@ -165,7 +165,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource damageSourceIn)
+    public SoundEvent getHurtSound(DamageSource damageSource)
     {
         return SoundEvents.ENTITY_GHAST_HURT;
     }
@@ -203,7 +203,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     static class AICandyAttack extends EntityAIBase
     {
         public final WitherSkeletonGhast parentEntity;
-        public int attackTimer;
+        private int attackTimer;
 
         public AICandyAttack(WitherSkeletonGhast ghast)
         {
@@ -353,7 +353,7 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
     static class GhastMoveHelper extends EntityMoveHelper
     {
         public final WitherSkeletonGhast parentEntity;
-        public int courseChangeCooldown;
+        private int courseChangeCooldown;
 
         public GhastMoveHelper(WitherSkeletonGhast ghast)
         {
@@ -390,14 +390,14 @@ public class WitherSkeletonGhast extends EntityFlying implements IMob
             }
         }
 
-        public boolean isNotColliding(double x, double y, double z, double p_179926_7_)
+        public boolean isNotColliding(double x, double y, double z, double d)
         {
-            double d0 = (x - this.parentEntity.posX) / p_179926_7_;
-            double d1 = (y - this.parentEntity.posY) / p_179926_7_;
-            double d2 = (z - this.parentEntity.posZ) / p_179926_7_;
+            double d0 = (x - this.parentEntity.posX) / d;
+            double d1 = (y - this.parentEntity.posY) / d;
+            double d2 = (z - this.parentEntity.posZ) / d;
             AxisAlignedBB axisalignedbb = this.parentEntity.getEntityBoundingBox();
 
-            for (int i = 1; i < p_179926_7_; ++i)
+            for (int i = 1; i < d; ++i)
             {
                 axisalignedbb = axisalignedbb.offset(d0, d1, d2);
 

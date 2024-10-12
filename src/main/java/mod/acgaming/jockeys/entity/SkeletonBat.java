@@ -32,11 +32,11 @@ import mod.acgaming.jockeys.util.JockeysHelper;
 public class SkeletonBat extends EntityMob
 {
     public static final DataParameter<Byte> SKELETON_BAT_FLAGS = EntityDataManager.createKey(SkeletonBat.class, DataSerializers.BYTE);
-    public EntityLiving rider;
+    private EntityLiving rider;
 
-    public SkeletonBat(World worldIn)
+    public SkeletonBat(World world)
     {
-        super(worldIn);
+        super(world);
         this.setSize(1.5F, 1.5F);
         this.moveHelper = new AIMoveControl(this);
     }
@@ -75,7 +75,7 @@ public class SkeletonBat extends EntityMob
     }
 
     @Override
-    public SoundEvent getHurtSound(DamageSource damageSourceIn)
+    public SoundEvent getHurtSound(DamageSource damageSource)
     {
         return SoundEvents.ENTITY_BAT_HURT;
     }

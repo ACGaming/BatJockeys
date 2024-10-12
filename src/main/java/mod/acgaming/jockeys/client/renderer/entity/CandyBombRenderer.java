@@ -18,16 +18,16 @@ public class CandyBombRenderer extends Render<CandyBomb>
     public static final CandyBombRenderer.Factory FACTORY = new CandyBombRenderer.Factory();
     public final CandyBombModel candyBombModel = new CandyBombModel();
 
-    public CandyBombRenderer(RenderManager renderManagerIn)
+    public CandyBombRenderer(RenderManager renderManager)
     {
-        super(renderManagerIn);
+        super(renderManager);
     }
 
-    public float getRenderYaw(float p_82400_1_, float p_82400_2_, float p_82400_3_)
+    public float getRenderYaw(float f1, float f2, float f3)
     {
         float f;
 
-        for (f = p_82400_2_ - p_82400_1_; f < -180.0F; f += 360.0F)
+        for (f = f2 - f1; f < -180.0F; f += 360.0F)
         {
         }
 
@@ -36,7 +36,7 @@ public class CandyBombRenderer extends Render<CandyBomb>
             f -= 360.0F;
         }
 
-        return p_82400_1_ + p_82400_3_ * f;
+        return f1 + f3 * f;
     }
 
     public void doRender(CandyBomb entity, double x, double y, double z, float entityYaw, float partialTicks)

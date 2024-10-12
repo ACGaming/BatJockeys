@@ -22,9 +22,9 @@ public class WitherSkeletonGhastRenderer extends RenderLiving<WitherSkeletonGhas
     public static final ResourceLocation GHAST_SHOOTING_TEXTURES = new ResourceLocation("textures/entity/ghast/ghast_shooting.png");
     public static final ResourceLocation GHAST_SHOOTING_TEXTURES_SPOOKY = new ResourceLocation(Jockeys.MOD_ID, "textures/entity/pumpkin_ghast_shooting.png");
 
-    public WitherSkeletonGhastRenderer(RenderManager renderManagerIn)
+    public WitherSkeletonGhastRenderer(RenderManager renderManager)
     {
-        super(renderManagerIn, new ModelGhast(), 0.5F);
+        super(renderManager, new ModelGhast(), 0.5F);
     }
 
     public ResourceLocation getEntityTexture(WitherSkeletonGhast entity)
@@ -33,7 +33,7 @@ public class WitherSkeletonGhastRenderer extends RenderLiving<WitherSkeletonGhas
         return entity.isAttacking() ? GHAST_SHOOTING_TEXTURES : GHAST_TEXTURES;
     }
 
-    public void preRenderCallback(WitherSkeletonGhast entitylivingbaseIn, float partialTickTime)
+    public void preRenderCallback(WitherSkeletonGhast entity, float partialTickTime)
     {
         GlStateManager.scale(3.0F, 3.0F, 3.0F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
