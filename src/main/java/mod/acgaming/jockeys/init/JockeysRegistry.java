@@ -1,13 +1,13 @@
 package mod.acgaming.jockeys.init;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-import com.google.common.collect.Lists;
 import net.minecraft.entity.*;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,10 +23,7 @@ import mod.acgaming.jockeys.entity.WitherSkeletonGhast;
 @Mod.EventBusSubscriber(modid = Jockeys.MOD_ID)
 public class JockeysRegistry
 {
-    public static final List<Biome> REGULAR_SPAWNING = Lists.newArrayList();
-    public static final List<Biome> NETHER_SPAWNING = Lists.newArrayList();
-    public static final List<Biome> END_SPAWNING = Lists.newArrayList();
-    public static int id = 0;
+    private static int id = 0;
 
     @SubscribeEvent
     public static void registerEntities(RegistryEvent.Register<EntityEntry> event)
@@ -37,29 +34,24 @@ public class JockeysRegistry
         registerEntity(CandyBomb.class, "candy_bomb");
 
         // SPAWNING
-        compileSpawningBiomes();
-        if (JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight, JockeysConfig.SKELETON_BAT_SETTINGS.minGroupSize, JockeysConfig.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, REGULAR_SPAWNING.toArray(new Biome[0]));
-        if (JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, NETHER_SPAWNING.toArray(new Biome[0]));
+        if (JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight, JockeysConfig.SKELETON_BAT_SETTINGS.minGroupSize, JockeysConfig.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, getEntityBiomes(EntitySkeleton.class));
+        if (JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, getEntityBiomes(EntityWitherSkeleton.class));
     }
 
-    public static void compileSpawningBiomes()
+    public static Biome[] getEntityBiomes(Class<? extends Entity> spawn)
     {
-        for (Biome b : Biome.REGISTRY)
+        List<Biome> biomes = new ArrayList<>();
+        for (Biome biome : Biome.REGISTRY)
         {
-            Set<BiomeDictionary.Type> types = BiomeDictionary.getTypes(b);
-            if (types.contains(BiomeDictionary.Type.NETHER))
-            {
-                NETHER_SPAWNING.add(b);
-            }
-            else if (types.contains(BiomeDictionary.Type.END))
-            {
-                END_SPAWNING.add(b);
-            }
-            else if (!types.contains(BiomeDictionary.Type.WATER))
-            {
-                REGULAR_SPAWNING.add(b);
-            }
+            List<Biome.SpawnListEntry> spawnList = biome.getSpawnableList(EnumCreatureType.MONSTER);
+            for (Biome.SpawnListEntry list : spawnList)
+                if (list.entityClass == spawn)
+                {
+                    biomes.add(biome);
+                    break;
+                }
         }
+        return biomes.toArray(new Biome[0]);
     }
 
     public static void registerEntity(Class<? extends Entity> cls, String name, int primaryColor, int secondaryColor, EntityLiving.SpawnPlacementType placementType)

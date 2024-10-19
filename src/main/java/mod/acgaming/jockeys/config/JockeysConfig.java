@@ -57,7 +57,7 @@ public class JockeysConfig
         @Config.RequiresMcRestart
         @Config.Name("Skeleton Bat Spawn Weight")
         @Config.Comment("Chance to spawn")
-        public int spawnWeight = 15;
+        public int spawnWeight = 20;
 
         @Config.Name("Skeleton Bat Max Health")
         public double maxHealth = 10.0D;
@@ -108,7 +108,7 @@ public class JockeysConfig
         @Config.RequiresMcRestart
         @Config.Name("Wither Skeleton Ghast Spawn Weight")
         @Config.Comment("Chance to spawn")
-        public int spawnWeight = 15;
+        public int spawnWeight = 20;
 
         @Config.Name("Wither Skeleton Ghast Max Health")
         public double maxHealth = 10.0D;
