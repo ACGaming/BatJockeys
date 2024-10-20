@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import mod.acgaming.jockeys.Jockeys;
 import mod.acgaming.jockeys.util.JockeysHelper;
 
 public class CandyBomb extends EntityFireball
@@ -86,6 +87,10 @@ public class CandyBomb extends EntityFireball
                 this.applyEnchantments(this.shootingEntity, result.entityHit);
             }
             this.setDead();
+            if (Jockeys.isSpookySeason(this.world) && this.rand.nextBoolean() && !JockeysHelper.dropList.isEmpty())
+            {
+                this.dropItemWithOffset(JockeysHelper.getRandomHalloweenDrop(this.world), 1, 0.5F);
+            }
         }
         else if (FMLLaunchHandler.side().isClient() && (result.sideHit == EnumFacing.UP || result.entityHit != null)) spawnParticles(world, this.getPosition());
     }
