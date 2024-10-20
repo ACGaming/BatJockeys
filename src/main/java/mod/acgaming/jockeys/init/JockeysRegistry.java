@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.*;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityWitherSkeleton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
@@ -35,7 +35,7 @@ public class JockeysRegistry
 
         // SPAWNING
         if (JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(SkeletonBat.class, JockeysConfig.SKELETON_BAT_SETTINGS.spawnWeight, JockeysConfig.SKELETON_BAT_SETTINGS.minGroupSize, JockeysConfig.SKELETON_BAT_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, getEntityBiomes(EntitySkeleton.class));
-        if (JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, getEntityBiomes(EntityWitherSkeleton.class));
+        if (JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight > 0) EntityRegistry.addSpawn(WitherSkeletonGhast.class, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.spawnWeight, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.minGroupSize, JockeysConfig.WITHER_SKELETON_GHAST_SETTINGS.maxGroupSize, EnumCreatureType.MONSTER, getEntityBiomes(EntityGhast.class));
     }
 
     public static Biome[] getEntityBiomes(Class<? extends Entity> spawn)
